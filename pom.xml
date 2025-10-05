@@ -98,7 +98,12 @@
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.8.10</version>
 		</dependency>
-
+		<!-- Amazon AWS SDK -->
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>s3</artifactId>
+			<version>2.20.0</version>
+		</dependency>
 		<!-- WebClient-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
