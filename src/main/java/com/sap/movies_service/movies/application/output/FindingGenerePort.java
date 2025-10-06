@@ -9,6 +9,8 @@ import java.util.UUID;
 public interface FindingGenerePort {
     Optional<Genere> findById(UUID id);
 
+    Optional<Genere> findByName(String name);
+
     List<Genere> findLikeName(String name);
 
     List<Genere> findAll();

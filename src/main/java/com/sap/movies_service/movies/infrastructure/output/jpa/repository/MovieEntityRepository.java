@@ -16,4 +16,6 @@ public interface MovieEntityRepository extends JpaRepository<MovieEntity, UUID> 
     List<MovieEntity> findByGenereId(UUID genereId);
 
     List<MovieEntity> findByIdIn(List<UUID> ids);
+
+    List<MovieEntity> findByTitleContainingIgnoreCase(String title);
 }

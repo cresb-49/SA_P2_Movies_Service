@@ -1,4 +1,4 @@
-package com.sap.movies_service.movies.infrastructure.output.mapper;
+package com.sap.movies_service.movies.infrastructure.output.jpa.mapper;
 
 import org.springframework.stereotype.Component;
 
