@@ -12,4 +12,6 @@ public interface FindingMoviePort {
     List<Movie> findAll();
 
     List<Movie> findLikeTitle(String title);
+
+    List<Movie> findByGenereId(UUID genereId);
 }

@@ -10,7 +10,7 @@ public interface FindMoviePort {
 
     List<Movie> findByTitle(String title);
 
-    Movie findByGenere(UUID genereId);
+    List<Movie> findByGenere(UUID genereId);
 
     List<Movie> findAll();
 }
