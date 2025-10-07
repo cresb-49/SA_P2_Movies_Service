@@ -57,4 +57,22 @@ public class MovieController {
         var result = findMoviePort.findById(id);
         return ResponseEntity.ok(result);
     }
+
+    @GetMapping("/title/{title}")
+    public ResponseEntity<?> getMoviesByTitle(@PathVariable String title) {
+        var result = findMoviePort.findByTitle(title);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/genere/{genereId}")
+    public ResponseEntity<?> getMoviesByGenere(@PathVariable UUID genereId) {
+        var result = findMoviePort.findByGenere(genereId);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllMovies() {
+        var result = findMoviePort.findAll();
+        return ResponseEntity.ok(result);
+    }
 }
