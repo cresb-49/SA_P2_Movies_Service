@@ -7,6 +7,9 @@ import com.sap.movies_service.movies.application.input.UpdateMoviePort;
 import com.sap.movies_service.movies.infrastructure.input.dtos.CreateMovieRequestDTO;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+
+import java.io.IOException;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +30,7 @@ public class MovieController {
     public ResponseEntity<?> createMovie(
             @ModelAttribute CreateMovieRequestDTO createMovieRequestDTO,
             @RequestPart("image") MultipartFile image
-    ) {
+    ) throws IOException {
         var result = createMoviePort.create(createMovieRequestDTO.toDTO(image));
         return ResponseEntity.ok(result);
     }
