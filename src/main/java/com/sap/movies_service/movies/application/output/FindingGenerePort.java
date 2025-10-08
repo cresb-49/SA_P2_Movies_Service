@@ -1,17 +1,17 @@
 package com.sap.movies_service.movies.application.output;
 
-import com.sap.movies_service.movies.domain.Genere;
+import com.sap.movies_service.movies.domain.Genre;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface FindingGenerePort {
-    Optional<Genere> findById(UUID id);
+    Optional<Genre> findById(UUID id);
 
-    Optional<Genere> findByName(String name);
+    Optional<Genre> findByName(String name);
 
-    List<Genere> findLikeName(String name);
+    List<Genre> findLikeName(String name);
 
-    List<Genere> findAll();
+    List<Genre> findAll();
 }

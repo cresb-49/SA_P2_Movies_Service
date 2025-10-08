@@ -2,10 +2,7 @@ package com.sap.movies_service.movies.infrastructure.output.jpa.entity;
 
 import java.util.UUID;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,10 +20,11 @@ public class MovieEntity {
     
     @Column(nullable = false)
     private String title;
-    
-    @Column(nullable = false)
-    private UUID genereId;
-    
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "genere_id", nullable = false)
+    private GenreEntity genre;
+
     @Column(nullable = false)
     private int duration;
     

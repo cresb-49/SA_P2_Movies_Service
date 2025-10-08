@@ -4,6 +4,7 @@ import com.sap.movies_service.movies.application.input.FindMoviePort;
 import com.sap.movies_service.movies.application.output.FindingMoviePort;
 import com.sap.movies_service.movies.domain.Movie;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,17 +24,22 @@ public class FindMovieCase implements FindMoviePort {
     }
 
     @Override
-    public List<Movie> findByTitle(String title) {
-        return findingMoviePort.findLikeTitle(title);
+    public Page<Movie> findByTitle(String title, int page) {
+        return findingMoviePort.findLikeTitle(title,page);
     }
 
     @Override
-    public List<Movie> findByGenere(UUID genereId) {
-        return findingMoviePort.findByGenereId(genereId);
+    public Page<Movie> findByGenere(UUID genereId, int page) {
+        return findingMoviePort.findByGenereId(genereId,page);
     }
 
     @Override
-    public List<Movie> findAll() {
-        return findingMoviePort.findAll();
+    public Page<Movie> findAll(int page) {
+        return findingMoviePort.findAll(page);
+    }
+
+    @Override
+    public List<Movie> findByIdsIn(List<UUID> ids) {
+        return findingMoviePort.findByIdsIn(ids);
     }
 }

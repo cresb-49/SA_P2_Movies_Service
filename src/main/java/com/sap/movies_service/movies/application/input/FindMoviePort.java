@@ -1,6 +1,7 @@
 package com.sap.movies_service.movies.application.input;
 
 import com.sap.movies_service.movies.domain.Movie;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.UUID;
@@ -8,9 +9,11 @@ import java.util.UUID;
 public interface FindMoviePort {
     Movie findById(String id);
 
-    List<Movie> findByTitle(String title);
+    Page<Movie> findByTitle(String title, int page);
 
-    List<Movie> findByGenere(UUID genereId);
+    Page<Movie> findByGenere(UUID genereId, int page);
 
-    List<Movie> findAll();
+    Page<Movie> findAll(int page);
+
+    List<Movie> findByIdsIn(List<UUID> ids);
 }

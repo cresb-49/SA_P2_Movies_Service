@@ -1,6 +1,6 @@
 package com.sap.movies_service.movies.infrastructure.input.mappers;
 
-import com.sap.movies_service.movies.domain.Genere;
+import com.sap.movies_service.movies.domain.Genre;
 import com.sap.movies_service.movies.infrastructure.input.dtos.GenereResponseDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -11,14 +11,14 @@ import java.util.List;
 @AllArgsConstructor
 public class GenereResponseMapper {
 
-    public GenereResponseDTO toResponse(Genere genere) {
+    public GenereResponseDTO toResponse(Genre genre) {
         return new GenereResponseDTO(
-                genere.getId(),
-                genere.getName()
+                genre.getId(),
+                genre.getName()
         );
     }
 
-    public List<GenereResponseDTO> toResponseList(List<Genere> generes) {
-        return generes.stream().map(this::toResponse).toList();
+    public List<GenereResponseDTO> toResponseList(List<Genre> genres) {
+        return genres.stream().map(this::toResponse).toList();
     }
 }

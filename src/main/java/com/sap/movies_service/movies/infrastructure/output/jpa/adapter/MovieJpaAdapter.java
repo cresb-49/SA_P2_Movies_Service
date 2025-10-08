@@ -5,8 +5,11 @@ import com.sap.movies_service.movies.application.output.FindingMoviePort;
 import com.sap.movies_service.movies.application.output.SaveMoviePort;
 import com.sap.movies_service.movies.domain.Movie;
 import com.sap.movies_service.movies.infrastructure.output.jpa.entity.MovieEntity;
+import com.sap.movies_service.movies.infrastructure.output.jpa.mapper.MovieMapper;
 import com.sap.movies_service.movies.infrastructure.output.jpa.repository.MovieEntityRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,29 +21,40 @@ import java.util.UUID;
 public class MovieJpaAdapter implements FindingMoviePort, SaveMoviePort, DeletingMoviePort {
 
     private final MovieEntityRepository movieEntityRepository;
+    private final MovieMapper movieMapper;
 
     @Override
     public Optional<Movie> findById(UUID id) {
-        var entity = movieEntityRepository.findById(id);
-        return Optional.empty();
+        return movieEntityRepository.findById(id).map(movieMapper::toDomain);
     }
 
     @Override
-    public List<Movie> findAll() {
-        var entities = movieEntityRepository.findAll();
-        return List.of();
+    public Page<Movie> findAll(int page) {
+        var result = movieEntityRepository.findAll(
+                PageRequest.of(page, 20)
+        );
+        return result.map(movieMapper::toDomain);
     }
 
     @Override
-    public List<Movie> findLikeTitle(String title) {
-        var entities = movieEntityRepository.findByTitleContainingIgnoreCase(title);
-        return List.of();
+    public Page<Movie> findLikeTitle(String title, int page) {
+        var result = movieEntityRepository.findByTitleContainingIgnoreCase(
+                title,
+                PageRequest.of(page, 20)
+        );
+        return result.map(movieMapper::toDomain);
     }
 
     @Override
-    public List<Movie> findByGenereId(UUID genereId) {
-        var entities = movieEntityRepository.findByGenereId(genereId);
-        return List.of();
+    public Page<Movie> findByGenereId(UUID genereId, int page) {
+        var entities = movieEntityRepository.findByGenre_Id(genereId, PageRequest.of(page, 20));
+        return entities.map(movieMapper::toDomain);
+    }
+
+    @Override
+    public List<Movie> findByIdsIn(List<UUID> ids) {
+        var entities = movieEntityRepository.findByIdIn(ids);
+        return entities.stream().map(movieMapper::toDomain).toList();
     }
 
     @Override

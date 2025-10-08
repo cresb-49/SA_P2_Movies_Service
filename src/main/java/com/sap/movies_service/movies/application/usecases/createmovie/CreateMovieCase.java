@@ -5,6 +5,7 @@ import com.sap.movies_service.movies.application.output.FindingGenerePort;
 import com.sap.movies_service.movies.application.output.SaveImagePort;
 import com.sap.movies_service.movies.application.output.SaveMoviePort;
 import com.sap.movies_service.movies.application.usecases.createmovie.dtos.CreateMovieDTO;
+import com.sap.movies_service.movies.domain.Genre;
 import com.sap.movies_service.movies.domain.Movie;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,12 +33,12 @@ public class CreateMovieCase implements CreateMoviePort {
             throw new IllegalArgumentException("Image must be png, jpg or jpeg");
         }
         // Check if the genere exists
-        findingGenerePort.findById(createMovieDTO.getGenereId())
+        Genre genre = findingGenerePort.findById(createMovieDTO.getGenereId())
                 .orElseThrow(() -> new IllegalArgumentException("Genere with id " + createMovieDTO.getGenereId() + " does not exist"));
         // Create a Movie domain object
         Movie movie = new Movie(
                 createMovieDTO.getTitle(),
-                createMovieDTO.getGenereId(),
+                genre,
                 createMovieDTO.getDuration(),
                 createMovieDTO.getSinopsis()
         );

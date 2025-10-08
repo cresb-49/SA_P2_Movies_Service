@@ -1,8 +1,8 @@
 package com.sap.movies_service.movies.domain;
 
+import java.util.Objects;
 import java.util.UUID;
 
-import com.sap.movies_service.movies.application.usecases.createmovie.dtos.CreateMovieDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -11,15 +11,15 @@ import lombok.Getter;
 public class Movie {
     private UUID id;
     private String title;
-    private UUID genereId;
+    private Genre genre;
     private int duration;
     private String sinopsis;
     private String urlImage;
 
-    public Movie(String title, UUID genereId, int duration, String sinopsis) {
+    public Movie(String title, Genre genre, int duration, String sinopsis) {
         this.id = UUID.randomUUID();
         this.title = title;
-        this.genereId = genereId;
+        this.genre = genre;
         this.duration = duration;
         this.sinopsis = sinopsis;
     }
@@ -28,8 +28,8 @@ public class Movie {
         if (this.title == null || this.title.isEmpty()) {
             throw new IllegalArgumentException("Title is required");
         }
-        if (this.genereId == null) {
-            throw new IllegalArgumentException("Genere ID is required");
+        if (this.genre == null) {
+            throw new IllegalArgumentException("Genere is required");
         }
         if (this.duration <= 0) {
             throw new IllegalArgumentException("Duration must be greater than 0");
@@ -44,5 +44,17 @@ public class Movie {
 
     public void setUrlImage(String urlImage) {
         this.urlImage = urlImage;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Movie movie = (Movie) o;
+        return Objects.equals(id, movie.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

@@ -1,11 +1,10 @@
 package com.sap.movies_service.movies.application.usecases.creategenere;
 
 import com.sap.movies_service.movies.application.input.CreateGenerePort;
-import com.sap.movies_service.movies.application.input.FindGenerePort;
 import com.sap.movies_service.movies.application.output.FindingGenerePort;
 import com.sap.movies_service.movies.application.output.SaveGenerePort;
 import com.sap.movies_service.movies.application.usecases.creategenere.dtos.CreateGenereDTO;
-import com.sap.movies_service.movies.domain.Genere;
+import com.sap.movies_service.movies.domain.Genre;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,12 +18,12 @@ public class CreateGenereCase implements CreateGenerePort {
     private final SaveGenerePort saveGenerePort;
 
     @Override
-    public Genere create(CreateGenereDTO createGenereDTO) {
+    public Genre create(CreateGenereDTO createGenereDTO) {
         findingGenerePort.findByName(createGenereDTO.getName())
                 .ifPresent(g -> {
                     throw new IllegalArgumentException("Genere with name " + createGenereDTO.getName() + " already exists");
                 });
-        Genere genere = new Genere(createGenereDTO.getName());
-        return saveGenerePort.save(genere);
+        Genre genre = new Genre(createGenereDTO.getName());
+        return saveGenerePort.save(genre);
     }
 }

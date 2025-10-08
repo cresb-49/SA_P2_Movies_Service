@@ -17,7 +17,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class GenereEntity {
+public class GenreEntity {
     
     @Id
     private UUID id;
@@ -40,7 +40,7 @@ public class GenereEntity {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        GenereEntity other = (GenereEntity) obj;
+        GenreEntity other = (GenreEntity) obj;
         if (id == null) {
             if (other.id != null)
                 return false;
