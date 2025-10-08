@@ -15,26 +15,29 @@ public class S3Service implements S3ServicePort {
     private final S3Client s3Client;
 
     @Override
-    public void uploadFileFromBytes(String bucketName, String keyName, byte[] fileData) {
+    public void uploadFileFromBytes(String bucketName, String directory, String keyName, byte[] fileData) {
+        String key = (directory.endsWith("/") ? directory : directory + "/") + keyName;
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(bucketName)
-                .key(keyName)
+                .key(key)
                 .build();
         s3Client.putObject(putObjectRequest, software.amazon.awssdk.core.sync.RequestBody.fromBytes(fileData));
     }
 
     @Override
-    public void uploadFileFromFile(String bucketName, String keyName, File file) {
+    public void uploadFileFromFile(String bucketName, String directory, String keyName, File file) {
+        String key = (directory.endsWith("/") ? directory : directory + "/") + keyName;
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(bucketName)
-                .key(keyName)
+                .key(key)
                 .build();
         s3Client.putObject(putObjectRequest, software.amazon.awssdk.core.sync.RequestBody.fromFile(file));
     }
 
     @Override
-    public byte[] downloadFile(String bucketName, String keyName) throws IOException {
-        return s3Client.getObject(builder -> builder.bucket(bucketName).key(keyName))
+    public byte[] downloadFile(String bucketName, String directory, String keyName) throws IOException {
+        String key = (directory.endsWith("/") ? directory : directory + "/") + keyName;
+        return s3Client.getObject(builder -> builder.bucket(bucketName).key(key))
                 .readAllBytes();
     }
 }

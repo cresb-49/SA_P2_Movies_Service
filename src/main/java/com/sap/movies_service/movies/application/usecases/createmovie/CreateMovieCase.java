@@ -7,34 +7,43 @@ import com.sap.movies_service.movies.application.output.SaveMoviePort;
 import com.sap.movies_service.movies.application.usecases.createmovie.dtos.CreateMovieDTO;
 import com.sap.movies_service.movies.domain.Genre;
 import com.sap.movies_service.movies.domain.Movie;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CreateMovieCase implements CreateMoviePort {
+
+    @Value("${bucket.name}")
+    private String bucketName;
+
+    @Value("${bucket.directory}")
+    private String bucketDirectory;
+
+    @Value("${aws.region}")
+    private String awsRegion;
 
     private final FindingGenerePort findingGenerePort;
     private final SaveMoviePort saveMoviePort;
     private final SaveImagePort saveImagePort;
 
     @Override
-    public Movie create(CreateMovieDTO createMovieDTO) throws IOException {
+    public Movie create(CreateMovieDTO createMovieDTO) {
         if (createMovieDTO.getImage().isEmpty()) {
-            throw new IllegalArgumentException("Image is required");
+            throw new RuntimeException("Image is required");
         }
         if (!List.of("image/png", "image/jpg", "image/jpeg").contains(createMovieDTO.getImage().getContentType())) {
-            throw new IllegalArgumentException("Image must be png, jpg or jpeg");
+            throw new RuntimeException("Image must be png, jpg or jpeg");
         }
         // Check if the genere exists
         Genre genre = findingGenerePort.findById(createMovieDTO.getGenereId())
-                .orElseThrow(() -> new IllegalArgumentException("Genere with id " + createMovieDTO.getGenereId() + " does not exist"));
+                .orElseThrow(() -> new RuntimeException("Genere with id " + createMovieDTO.getGenereId() + " does not exist"));
         // Create a Movie domain object
         Movie movie = new Movie(
                 createMovieDTO.getTitle(),
@@ -57,23 +66,29 @@ public class CreateMovieCase implements CreateMoviePort {
     private String parseImageData(MultipartFile image, Movie movie) {
         var originalFilename = image.getOriginalFilename();
         if (originalFilename == null || originalFilename.isEmpty()) {
-            throw new IllegalArgumentException("Image must have a name");
+            throw new RuntimeException("Image must have a name");
         }
         // Name of the image file is a UUID of the movie + extension
         var imageName = movie.getId().toString();
         // Get Original extension
         var extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
         //Set the urlImage of the movie
-        var bucketName = System.getenv("AWS_BUCKET_NAME");
-        var region = System.getenv("AWS_REGION");
-        var directory = System.getenv("AWS_DIRECTORY");
-        return "https://" + bucketName + ".s3." + region + ".amazonaws.com/" + directory + "/" + imageName + "." + extension;
+        return "https://" + bucketName + ".s3." + awsRegion + ".amazonaws.com/" + bucketDirectory + "/" + imageName + "." + extension;
     }
 
-    private void uploadImageToS3(MultipartFile image, Movie movie) throws IOException {
-        var bucketName = System.getenv("AWS_BUCKET_NAME");
-        var imageName = movie.getId().toString();
-        byte[] bytes = image.getBytes();
-        saveImagePort.uploadImage(bucketName,imageName,bytes);
+    private void uploadImageToS3(MultipartFile image, Movie movie) {
+        try {
+            var originalFilename = image.getOriginalFilename();
+            if (originalFilename == null || originalFilename.isEmpty()) {
+                throw new RuntimeException("Image must have a name");
+            }
+            var imageName = movie.getId().toString();
+            var extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+            var key = imageName + "." + extension;
+            byte[] bytes = image.getBytes();
+            saveImagePort.uploadImage(bucketName, bucketDirectory, key, bytes);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }

@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.IOException;
 
 public interface S3ServicePort {
-    void uploadFileFromBytes(String bucketName, String keyName, byte[] fileData);
+    void uploadFileFromBytes(String bucketName, String directory, String keyName, byte[] fileData);
 
-    void uploadFileFromFile(String bucketName, String keyName, File file);
+    void uploadFileFromFile(String bucketName,String directory, String keyName, File file);
 
-    byte[] downloadFile(String bucketName, String keyName) throws IOException;
+    byte[] downloadFile(String bucketName,String directory, String keyName) throws IOException;
 }

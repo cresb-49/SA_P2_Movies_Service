@@ -12,7 +12,7 @@ public class BucketAdapter implements SaveImagePort {
     private final BucketGatewayPort bucketGatewayPort;
 
     @Override
-    public void uploadImage(String bucketName, String keyName, byte[] fileData) {
-        bucketGatewayPort.uploadFileFromBytes(bucketName, keyName, fileData);
+    public void uploadImage(String bucketName, String directory, String keyName, byte[] fileData) {
+        bucketGatewayPort.uploadFileFromBytes(bucketName, directory, keyName, fileData);
     }
 }
