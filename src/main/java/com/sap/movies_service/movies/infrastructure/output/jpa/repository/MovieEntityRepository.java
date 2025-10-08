@@ -13,6 +13,8 @@ import java.util.UUID;
 
 public interface MovieEntityRepository extends JpaRepository<MovieEntity, UUID> {
 
+    boolean existsByGenre_Id(UUID genreId);
+
     Optional<MovieEntity> findById(UUID id);
 
     List<MovieEntity> findByIdIn(List<UUID> ids);

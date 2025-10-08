@@ -5,6 +5,7 @@ import com.sap.movies_service.movies.application.output.FindingGenerePort;
 import com.sap.movies_service.movies.application.output.SaveGenerePort;
 import com.sap.movies_service.movies.domain.Genre;
 import com.sap.movies_service.movies.infrastructure.output.jpa.entity.GenreEntity;
+import com.sap.movies_service.movies.infrastructure.output.jpa.mapper.GenreMapper;
 import com.sap.movies_service.movies.infrastructure.output.jpa.repository.GenreEntityRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,35 +19,36 @@ import java.util.UUID;
 public class GenreJpaAdapter implements FindingGenerePort, SaveGenerePort, DeletingGenerePort {
 
     private final GenreEntityRepository genreEntityRepository;
+    private final GenreMapper genreMapper;
 
     @Override
     public Optional<Genre> findById(UUID id) {
         var entity = genreEntityRepository.findById(id);
-        return Optional.empty();
+        return entity.map(genreMapper::toDomain);
     }
 
     @Override
     public Optional<Genre> findByName(String name) {
         var entity = genreEntityRepository.findByName(name);
-        return Optional.empty();
+        return entity.map(genreMapper::toDomain);
     }
 
     @Override
     public List<Genre> findLikeName(String name) {
         var entities = genreEntityRepository.findByNameContainingIgnoreCase(name);
-        return List.of();
+        return entities.stream().map(genreMapper::toDomain).toList();
     }
 
     @Override
     public List<Genre> findAll() {
         var entities = genreEntityRepository.findAll();
-        return List.of();
+        return entities.stream().map(genreMapper::toDomain).toList();
     }
 
     @Override
     public Genre save(Genre genre) {
         var entity = genreEntityRepository.save(new GenreEntity());
-        return null;
+        return genreMapper.toDomain(entity);
     }
 
     @Override

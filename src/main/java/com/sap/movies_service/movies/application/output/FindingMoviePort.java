@@ -17,4 +17,6 @@ public interface FindingMoviePort {
     Page<Movie> findByGenereId(UUID genereId, int page);
 
     List<Movie> findByIdsIn(List<UUID> ids);
+
+    boolean existsByGenreId(UUID genreId);
 }

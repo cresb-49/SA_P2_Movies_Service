@@ -58,6 +58,11 @@ public class MovieJpaAdapter implements FindingMoviePort, SaveMoviePort, Deletin
     }
 
     @Override
+    public boolean existsByGenreId(UUID genreId) {
+        return movieEntityRepository.existsByGenre_Id(genreId);
+    }
+
+    @Override
     public Movie save(Movie movie) {
         var entity = movieEntityRepository.save(new MovieEntity());
         return null;
