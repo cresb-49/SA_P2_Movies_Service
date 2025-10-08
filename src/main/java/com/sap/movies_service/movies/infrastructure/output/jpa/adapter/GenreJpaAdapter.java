@@ -47,8 +47,9 @@ public class GenreJpaAdapter implements FindingGenerePort, SaveGenerePort, Delet
 
     @Override
     public Genre save(Genre genre) {
-        var entity = genreEntityRepository.save(new GenreEntity());
-        return genreMapper.toDomain(entity);
+        var entity = genreMapper.toEntity(genre);
+        var savedEntity = genreEntityRepository.save(entity);
+        return genreMapper.toDomain(savedEntity);
     }
 
     @Override

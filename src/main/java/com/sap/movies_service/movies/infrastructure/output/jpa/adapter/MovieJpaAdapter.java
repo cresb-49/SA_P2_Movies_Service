@@ -64,8 +64,9 @@ public class MovieJpaAdapter implements FindingMoviePort, SaveMoviePort, Deletin
 
     @Override
     public Movie save(Movie movie) {
-        var entity = movieEntityRepository.save(new MovieEntity());
-        return null;
+        var entity = movieMapper.toEntity(movie);
+        var savedEntity = movieEntityRepository.save(entity);
+        return movieMapper.toDomain(savedEntity);
     }
 
     @Override

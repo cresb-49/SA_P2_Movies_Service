@@ -3,7 +3,6 @@ package com.sap.movies_service.movies.application.usecases.findgenere;
 import com.sap.movies_service.movies.application.input.FindGenerePort;
 import com.sap.movies_service.movies.application.output.FindingGenerePort;
 import com.sap.movies_service.movies.domain.Genre;
-import com.sap.movies_service.movies.domain.Movie;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +19,9 @@ public class FindGenereCase implements FindGenerePort {
 
     @Override
     public Genre findById(UUID id) {
-        return findingGenerePort.findById(id).orElse(null);
+        return findingGenerePort.findById(id).orElseThrow(
+                () -> new RuntimeException("Genere with id " + id + " does not exist")
+        );
     }
 
     @Override
