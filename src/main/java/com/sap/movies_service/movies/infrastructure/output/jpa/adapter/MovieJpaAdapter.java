@@ -4,7 +4,6 @@ import com.sap.movies_service.movies.application.output.DeletingMoviePort;
 import com.sap.movies_service.movies.application.output.FindingMoviePort;
 import com.sap.movies_service.movies.application.output.SaveMoviePort;
 import com.sap.movies_service.movies.domain.Movie;
-import com.sap.movies_service.movies.infrastructure.output.jpa.entity.MovieEntity;
 import com.sap.movies_service.movies.infrastructure.output.jpa.mapper.MovieMapper;
 import com.sap.movies_service.movies.infrastructure.output.jpa.repository.MovieEntityRepository;
 import lombok.AllArgsConstructor;

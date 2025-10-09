@@ -51,38 +51,40 @@ public class CreateMovieCase implements CreateMoviePort {
                 createMovieDTO.getDuration(),
                 createMovieDTO.getSinopsis()
         );
+        // Generation timestamp
+        var now = System.currentTimeMillis();
         // Process image
-        var urlImage = parseImageData(createMovieDTO.getImage(), movie);
+        var urlImage = parseImageData(createMovieDTO.getImage(), movie, now);
         // Set the urlImage of the movie
         movie.setUrlImage(urlImage);
         // Validate the movie
         movie.validated();
         // Upload the image to S3
-        this.uploadImageToS3(createMovieDTO.getImage(), movie);
+        this.uploadImageToS3(createMovieDTO.getImage(), movie, now);
         // Save the movie to the database
         return saveMoviePort.save(movie);
     }
 
-    private String parseImageData(MultipartFile image, Movie movie) {
+    private String parseImageData(MultipartFile image, Movie movie,Long timestamp) {
         var originalFilename = image.getOriginalFilename();
         if (originalFilename == null || originalFilename.isEmpty()) {
             throw new RuntimeException("Image must have a name");
         }
         // Name of the image file is a UUID of the movie + extension
-        var imageName = movie.getId().toString();
+        var imageName = movie.getId().toString() + "-" + timestamp.toString();
         // Get Original extension
         var extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
         //Set the urlImage of the movie
         return "https://" + bucketName + ".s3." + awsRegion + ".amazonaws.com/" + bucketDirectory + "/" + imageName + "." + extension;
     }
 
-    private void uploadImageToS3(MultipartFile image, Movie movie) {
+    private void uploadImageToS3(MultipartFile image, Movie movie,Long timestamp) {
         try {
             var originalFilename = image.getOriginalFilename();
             if (originalFilename == null || originalFilename.isEmpty()) {
                 throw new RuntimeException("Image must have a name");
             }
-            var imageName = movie.getId().toString();
+            var imageName = movie.getId().toString() + "-" + timestamp.toString();
             var extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
             var key = imageName + "." + extension;
             byte[] bytes = image.getBytes();

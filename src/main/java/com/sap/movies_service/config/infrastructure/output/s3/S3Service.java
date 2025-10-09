@@ -4,6 +4,7 @@ import com.sap.movies_service.config.infrastructure.output.adapter.S3ServicePort
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.File;
@@ -39,5 +40,15 @@ public class S3Service implements S3ServicePort {
         String key = (directory.endsWith("/") ? directory : directory + "/") + keyName;
         return s3Client.getObject(builder -> builder.bucket(bucketName).key(key))
                 .readAllBytes();
+    }
+
+    @Override
+    public void deleteFile(String bucketName, String directory, String keyName) {
+        String key = (directory.endsWith("/") ? directory : directory + "/") + keyName;
+        DeleteObjectRequest req = DeleteObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .build();
+        s3Client.deleteObject(req);
     }
 }

@@ -9,4 +9,6 @@ public interface BucketGatewayPort {
     void uploadFileFromFile(String bucketName, String directory, String keyName, File file);
 
     byte[] downloadFile(String bucketName, String directory, String keyName) throws IOException;
+
+    void deleteFile(String bucketName, String directory, String keyName);
 }

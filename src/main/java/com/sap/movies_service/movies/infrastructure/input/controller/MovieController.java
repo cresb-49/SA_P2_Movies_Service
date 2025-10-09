@@ -36,7 +36,7 @@ public class MovieController {
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateMovie(
             @PathVariable UUID id,
             @ModelAttribute UpdateMovieRequestDTO updateMovieRequestDTO,

@@ -1,10 +1,10 @@
 package com.sap.movies_service.movies.domain;
 
-import java.util.Objects;
-import java.util.UUID;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.Objects;
+import java.util.UUID;
 
 @Getter
 @AllArgsConstructor
@@ -44,6 +44,22 @@ public class Movie {
 
     public void setUrlImage(String urlImage) {
         this.urlImage = urlImage;
+    }
+
+    public Movie update(String title, Genre genre, int duration, String sinopsis) {
+        if (title != null && !title.isEmpty()) {
+            this.title = title;
+        }
+        if (genre != null) {
+            this.genre = genre;
+        }
+        if (duration > 0) {
+            this.duration = duration;
+        }
+        if (sinopsis != null && !sinopsis.isEmpty()) {
+            this.sinopsis = sinopsis;
+        }
+        return this;
     }
 
     @Override

@@ -30,4 +30,9 @@ public class BucketGateway implements BucketGatewayPort {
     public byte[] downloadFile(String bucketName, String directory, String keyName) throws IOException {
         return s3ServicePort.downloadFile(bucketName, directory, keyName);
     }
+
+    @Override
+    public void deleteFile(String bucketName, String directory, String keyName) {
+        s3ServicePort.deleteFile(bucketName, directory, keyName);
+    }
 }
