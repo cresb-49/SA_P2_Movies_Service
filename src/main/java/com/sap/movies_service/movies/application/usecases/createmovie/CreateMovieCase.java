@@ -49,7 +49,10 @@ public class CreateMovieCase implements CreateMoviePort {
                 createMovieDTO.getTitle(),
                 genre,
                 createMovieDTO.getDuration(),
-                createMovieDTO.getSinopsis()
+                createMovieDTO.getSinopsis(),
+                createMovieDTO.getClassification(),
+                createMovieDTO.getDirector(),
+                createMovieDTO.getCasting()
         );
         // Generation timestamp
         var now = System.currentTimeMillis();

@@ -14,5 +14,8 @@ public class UpdateMovieDTO {
     private UUID genereId;
     private int duration;
     private String sinopsis;
+    private String classification;
+    private String director;
+    private String casting;
     private MultipartFile image;
 }

@@ -30,6 +30,15 @@ public class MovieEntity {
     
     @Column(nullable = false)
     private String sinopsis;
+
+    @Column(nullable = false)
+    private String classification;
+
+    @Column(nullable = false)
+    private String director;
+
+    @Column(nullable = false)
+    private String casting;
     
     @Column(nullable = false)
     private String urlImage;

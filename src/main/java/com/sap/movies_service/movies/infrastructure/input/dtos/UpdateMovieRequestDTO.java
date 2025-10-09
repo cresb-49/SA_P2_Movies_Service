@@ -15,9 +15,12 @@ public class UpdateMovieRequestDTO {
     private UUID genereId;
     private int duration;
     private String sinopsis;
+    private String classification;
+    private String director;
+    private String casting;
     private MultipartFile image;
 
     public UpdateMovieDTO toDTO(UUID id, MultipartFile image) {
-        return new UpdateMovieDTO(id,title, genereId, duration, sinopsis, image);
+        return new UpdateMovieDTO(id, title, genereId, duration, sinopsis, classification, director, casting, image);
     }
 }

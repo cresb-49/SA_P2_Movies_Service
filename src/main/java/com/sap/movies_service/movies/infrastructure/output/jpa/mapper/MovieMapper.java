@@ -20,6 +20,9 @@ public class MovieMapper {
                 genreMapper.toDomain(entity.getGenre()),
                 entity.getDuration(),
                 entity.getSinopsis(),
+                entity.getClassification(),
+                entity.getDirector(),
+                entity.getCasting(),
                 entity.getUrlImage()
         );
     }
@@ -32,6 +35,9 @@ public class MovieMapper {
                 genreMapper.toEntity(movie.getGenre()),
                 movie.getDuration(),
                 movie.getSinopsis(),
+                movie.getClassification(),
+                movie.getDirector(),
+                movie.getCasting(),
                 movie.getUrlImage()
         );
     }

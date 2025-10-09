@@ -59,7 +59,10 @@ public class UpdateMovieCase implements UpdateMoviePort {
                 updateMovieDTO.getTitle(),
                 genre,
                 updateMovieDTO.getDuration(),
-                updateMovieDTO.getSinopsis()
+                updateMovieDTO.getSinopsis(),
+                updateMovieDTO.getClassification(),
+                updateMovieDTO.getDirector(),
+                updateMovieDTO.getCasting()
         );
         if(updateImage) {
             var urlImage = parseImageData(updateMovieDTO.getImage(), movie, now);

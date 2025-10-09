@@ -20,6 +20,9 @@ public class MovieResponseMapper {
                 null,
                 movie.getDuration(),
                 movie.getSinopsis(),
+                movie.getClassification(),
+                movie.getDirector(),
+                movie.getCasting(),
                 movie.getUrlImage()
         );
     }
