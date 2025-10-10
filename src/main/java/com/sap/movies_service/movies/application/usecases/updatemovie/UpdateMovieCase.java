@@ -39,13 +39,14 @@ public class UpdateMovieCase implements UpdateMoviePort {
                 .orElseThrow(() -> new RuntimeException("Movie not found"));
         var updateImage = updateMovieDTO.getImage() != null && !updateMovieDTO.getImage().isEmpty();
         var now = System.currentTimeMillis();
+        var oldUrlImage = movie.getUrlImage();
         Movie updatedMovie = updateMovieData(updateMovieDTO, movie, updateImage, now);
         //Validate the movie
         updatedMovie.validated();
         //Update image if needed
         if(updateImage) {
-            deleteImageFromS3(movie);
             uploadImageToS3(updateMovieDTO.getImage(), movie, now);
+            deleteImageFromS3(oldUrlImage);
         }
         return saveMoviePort.save(updatedMovie);
     }
@@ -100,14 +101,10 @@ public class UpdateMovieCase implements UpdateMoviePort {
         }
     }
 
-    private void deleteImageFromS3(Movie movie) {
+    private void deleteImageFromS3(String urlImage) {
         try {
-            var urlImage = movie.getUrlImage();
-            if (urlImage == null || urlImage.isEmpty()) {
-                throw new RuntimeException("Movie does not have an image to delete");
-            }
-            // Extract the key from the urlImage
             var key = urlImage.substring(urlImage.lastIndexOf("/") + 1);
+            System.out.println("Deleting image with key: " + key);
             deletingImagePort.deleteImage(bucketName, bucketDirectory, key);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
