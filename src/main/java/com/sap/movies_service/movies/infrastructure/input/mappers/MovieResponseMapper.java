@@ -17,13 +17,15 @@ public class MovieResponseMapper {
         return new MovieResponseDTO(
                 movie.getId(),
                 movie.getTitle(),
-                null,
+                genereResponseMapper.toResponse(movie.getGenre()),
                 movie.getDuration(),
                 movie.getSinopsis(),
                 movie.getClassification(),
                 movie.getDirector(),
                 movie.getCasting(),
-                movie.getUrlImage()
+                movie.getUrlImage(),
+                movie.getCreatedAt(),
+                movie.getUpdatedAt()
         );
     }
 

@@ -23,7 +23,9 @@ public class MovieMapper {
                 entity.getClassification(),
                 entity.getDirector(),
                 entity.getCasting(),
-                entity.getUrlImage()
+                entity.getUrlImage(),
+                entity.getCreatedAt(),
+                entity.getUpdatedAt()
         );
     }
 
@@ -38,7 +40,9 @@ public class MovieMapper {
                 movie.getClassification(),
                 movie.getDirector(),
                 movie.getCasting(),
-                movie.getUrlImage()
+                movie.getUrlImage(),
+                movie.getCreatedAt(),
+                movie.getUpdatedAt()
         );
     }
 

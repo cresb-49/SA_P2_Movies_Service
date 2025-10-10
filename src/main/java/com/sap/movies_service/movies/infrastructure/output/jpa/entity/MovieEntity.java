@@ -1,5 +1,6 @@
 package com.sap.movies_service.movies.infrastructure.output.jpa.entity;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import jakarta.persistence.*;
@@ -42,6 +43,13 @@ public class MovieEntity {
     
     @Column(nullable = false)
     private String urlImage;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+
 
     @Override
     public int hashCode() {

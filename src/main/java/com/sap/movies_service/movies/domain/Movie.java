@@ -3,6 +3,7 @@ package com.sap.movies_service.movies.domain;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -18,6 +19,8 @@ public class Movie {
     private String director;
     private String casting;
     private String urlImage;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public Movie(
             String title,
@@ -36,6 +39,8 @@ public class Movie {
         this.classification = classification;
         this.director = director;
         this.casting = casting;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     public void validated() {
@@ -67,29 +72,41 @@ public class Movie {
 
     public void setUrlImage(String urlImage) {
         this.urlImage = urlImage;
+        this.updatedAt = LocalDateTime.now();
     }
 
     public Movie update(String title, Genre genre, int duration, String sinopsis, String classification, String director, String casting) {
+        var updateFlag = false;
         if (title != null && !title.isEmpty()) {
             this.title = title;
+            updateFlag = true;
         }
         if (genre != null) {
             this.genre = genre;
+            updateFlag = true;
         }
         if (duration > 0) {
             this.duration = duration;
+            updateFlag = true;
         }
         if (sinopsis != null && !sinopsis.isEmpty()) {
             this.sinopsis = sinopsis;
+            updateFlag = true;
         }
         if (classification != null && !classification.isEmpty()) {
             this.classification = classification;
+            updateFlag = true;
         }
         if (director != null && !director.isEmpty()) {
             this.director = director;
+            updateFlag = true;
         }
         if (casting != null && !casting.isEmpty()) {
             this.casting = casting;
+            updateFlag = true;
+        }
+        if (updateFlag) {
+            this.updatedAt = LocalDateTime.now();
         }
         return this;
     }
