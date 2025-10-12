@@ -32,11 +32,6 @@ public class FindMovieCase implements FindMoviePort {
     }
 
     @Override
-    public Page<Movie> findByGenere(UUID genereId, int page) {
-        return findingMoviePort.findByGenereId(genereId,page);
-    }
-
-    @Override
     public Page<Movie> findAll(int page) {
         return findingMoviePort.findAll(page);
     }

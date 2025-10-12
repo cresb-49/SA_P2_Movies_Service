@@ -12,16 +12,13 @@ import java.util.List;
 @AllArgsConstructor
 public class MovieResponseMapper {
 
-    private final GenereResponseMapper genereResponseMapper;
-
     public MovieResponseDTO toResponse(Movie movie) {
         return new MovieResponseDTO(
                 movie.getId(),
                 movie.getTitle(),
-                genereResponseMapper.toResponse(movie.getGenre()),
                 movie.getDuration(),
                 movie.getSinopsis(),
-                movie.getClassification(),
+                movie.getClassificationId(),
                 movie.getDirector(),
                 movie.getCasting(),
                 movie.getUrlImage(),

@@ -1,6 +1,5 @@
 package com.sap.movies_service.movies.infrastructure.output.jpa.mapper;
 
-import com.sap.movies_service.movies.domain.Genre;
 import com.sap.movies_service.movies.domain.Movie;
 import com.sap.movies_service.movies.infrastructure.output.jpa.entity.MovieEntity;
 import lombok.AllArgsConstructor;
@@ -10,20 +9,18 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class MovieMapper {
 
-    private final GenreMapper genreMapper;
-
     public Movie toDomain(MovieEntity entity) {
         if (entity == null) return null;
         return new Movie(
                 entity.getId(),
                 entity.getTitle(),
-                genreMapper.toDomain(entity.getGenre()),
                 entity.getDuration(),
                 entity.getSinopsis(),
-                entity.getClassification(),
+                entity.getClassificationId(),
                 entity.getDirector(),
                 entity.getCasting(),
                 entity.getUrlImage(),
+                entity.isActive(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt()
         );
@@ -34,13 +31,13 @@ public class MovieMapper {
         return new MovieEntity(
                 movie.getId(),
                 movie.getTitle(),
-                genreMapper.toEntity(movie.getGenre()),
                 movie.getDuration(),
                 movie.getSinopsis(),
-                movie.getClassification(),
+                movie.getClassificationId(),
                 movie.getDirector(),
                 movie.getCasting(),
                 movie.getUrlImage(),
+                movie.isActive(),
                 movie.getCreatedAt(),
                 movie.getUpdatedAt()
         );

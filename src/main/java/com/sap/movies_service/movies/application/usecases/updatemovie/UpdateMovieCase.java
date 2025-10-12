@@ -30,7 +30,6 @@ public class UpdateMovieCase implements UpdateMoviePort {
     private final SaveImagePort saveImagePort;
     private final DeletingImagePort deletingImagePort;
     private final SaveMoviePort saveMoviePort;
-    private final FindingGenerePort findingGenerePort;
 
     @Override
     public Movie update(UpdateMovieDTO updateMovieDTO) {
@@ -53,23 +52,19 @@ public class UpdateMovieCase implements UpdateMoviePort {
     }
 
     private Movie updateMovieData(UpdateMovieDTO updateMovieDTO, Movie movie, boolean updateImage, Long now) {
-        var genre = updateMovieDTO.getGenereId() != null ?
-                findingGenerePort.findById(updateMovieDTO.getGenereId())
-                        .orElseThrow(() -> new NotFoundException("Genere with id " + updateMovieDTO.getGenereId() + " does not exist"))
-                : movie.getGenre();
+        var urlImage = movie.getUrlImage();
+        if(updateImage) {
+            urlImage = parseImageData(updateMovieDTO.getImage(), movie, now);
+        }
         movie.update(
                 updateMovieDTO.getTitle(),
-                genre,
                 updateMovieDTO.getDuration(),
                 updateMovieDTO.getSinopsis(),
-                updateMovieDTO.getClassification(),
+                null,
                 updateMovieDTO.getDirector(),
-                updateMovieDTO.getCasting()
+                updateMovieDTO.getCasting(),
+                urlImage
         );
-        if(updateImage) {
-            var urlImage = parseImageData(updateMovieDTO.getImage(), movie, now);
-            movie.setUrlImage(urlImage);
-        }
         return movie;
     }
 
@@ -79,7 +74,7 @@ public class UpdateMovieCase implements UpdateMoviePort {
             throw new IllegalStateException("Image must have a name");
         }
         // Name of the image file is a UUID of the movie + extension
-        var imageName = movie.getId().toString() + "-" + timestamp.toString();
+        var imageName = "movie-" + timestamp.toString();
         // Get Original extension
         var extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
         //Set the urlImage of the movie
@@ -92,7 +87,7 @@ public class UpdateMovieCase implements UpdateMoviePort {
             if (originalFilename == null || originalFilename.isEmpty()) {
                 throw new IllegalStateException("Image must have a name");
             }
-            var imageName = movie.getId().toString() + "-" + timestamp.toString();
+            var imageName = "movie-" + timestamp.toString();
             var extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
             var key = imageName + "." + extension;
             byte[] bytes = image.getBytes();

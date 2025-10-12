@@ -32,7 +32,7 @@ public class MovieController {
     private final MovieResponseMapper movieResponseMapper;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasRole('ADMIN') or hasRole('CINEMA_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createMovie(
             @ModelAttribute CreateMovieRequestDTO createMovieRequestDTO,
             @RequestPart("image") MultipartFile image
@@ -42,7 +42,7 @@ public class MovieController {
     }
 
     @PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasRole('ADMIN') or hasRole('CINEMA_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateMovie(
             @PathVariable UUID id,
             @ModelAttribute UpdateMovieRequestDTO updateMovieRequestDTO,
@@ -53,7 +53,7 @@ public class MovieController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('CINEMA_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteMovie(@PathVariable UUID id) {
         deleteMoviePort.delete(id);
         return ResponseEntity.noContent().build();
@@ -73,16 +73,6 @@ public class MovieController {
             @RequestParam(name = "page", defaultValue = "0") int page
     ) {
         var result = findMoviePort.findByTitle(title, page);
-        return ResponseEntity.ok(movieResponseMapper.toResponsePage(result));
-    }
-
-    // public endpoint to get movies by genere id with pagination
-    @GetMapping("/genere/{genereId}")
-    public ResponseEntity<?> getMoviesByGenere(
-            @PathVariable UUID genereId,
-            @RequestParam(name = "page", defaultValue = "0") int page
-    ) {
-        var result = findMoviePort.findByGenere(genereId, page);
         return ResponseEntity.ok(movieResponseMapper.toResponsePage(result));
     }
 

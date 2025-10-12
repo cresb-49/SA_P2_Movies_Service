@@ -45,20 +45,9 @@ public class MovieJpaAdapter implements FindingMoviePort, SaveMoviePort, Deletin
     }
 
     @Override
-    public Page<Movie> findByGenereId(UUID genereId, int page) {
-        var entities = movieEntityRepository.findByGenre_Id(genereId, PageRequest.of(page, 20));
-        return entities.map(movieMapper::toDomain);
-    }
-
-    @Override
     public List<Movie> findByIdsIn(List<UUID> ids) {
         var entities = movieEntityRepository.findByIdIn(ids);
         return entities.stream().map(movieMapper::toDomain).toList();
-    }
-
-    @Override
-    public boolean existsByGenreId(UUID genreId) {
-        return movieEntityRepository.existsByGenre_Id(genreId);
     }
 
     @Override

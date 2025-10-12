@@ -22,18 +22,14 @@ public class MovieEntity {
     @Column(nullable = false)
     private String title;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "genere_id", nullable = false)
-    private GenreEntity genre;
-
     @Column(nullable = false)
     private int duration;
     
     @Column(nullable = false)
     private String sinopsis;
 
-    @Column(nullable = false)
-    private String classification;
+    @Column(name = "classification_id", nullable = false)
+    private UUID classificationId;
 
     @Column(nullable = false)
     private String director;
@@ -43,6 +39,9 @@ public class MovieEntity {
     
     @Column(nullable = false)
     private String urlImage;
+
+    @Column(nullable = false)
+    private boolean active;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;

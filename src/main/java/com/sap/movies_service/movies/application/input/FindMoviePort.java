@@ -11,8 +11,6 @@ public interface FindMoviePort {
 
     Page<Movie> findByTitle(String title, int page);
 
-    Page<Movie> findByGenere(UUID genereId, int page);
-
     Page<Movie> findAll(int page);
 
     List<Movie> findByIdsIn(List<UUID> ids);

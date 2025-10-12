@@ -12,33 +12,34 @@ import java.util.UUID;
 public class Movie {
     private UUID id;
     private String title;
-    private Genre genre;
     private int duration;
     private String sinopsis;
-    private String classification;
+    private UUID classificationId;
     private String director;
     private String casting;
     private String urlImage;
+    private boolean active;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     public Movie(
             String title,
-            Genre genre,
             int duration,
             String sinopsis,
-            String classification,
+            UUID classificationId,
             String director,
-            String casting
+            String casting,
+            String urlImage
     ) {
         this.id = UUID.randomUUID();
         this.title = title;
-        this.genre = genre;
         this.duration = duration;
         this.sinopsis = sinopsis;
-        this.classification = classification;
+        this.classificationId = classificationId;
         this.director = director;
         this.casting = casting;
+        this.active = true;
+        this.urlImage = urlImage;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
@@ -47,16 +48,13 @@ public class Movie {
         if (this.title == null || this.title.isEmpty()) {
             throw new IllegalArgumentException("Title is required");
         }
-        if (this.genre == null) {
-            throw new IllegalArgumentException("Genere is required");
-        }
         if (this.duration <= 0) {
             throw new IllegalArgumentException("Duration must be greater than 0");
         }
         if (this.sinopsis == null || this.sinopsis.isEmpty()) {
             throw new IllegalArgumentException("Sinopsis is required");
         }
-        if (this.classification == null || this.classification.isEmpty()) {
+        if (this.classificationId == null) {
             throw new IllegalArgumentException("Classification is required");
         }
         if (this.director == null || this.director.isEmpty()) {
@@ -70,19 +68,10 @@ public class Movie {
         }
     }
 
-    public void setUrlImage(String urlImage) {
-        this.urlImage = urlImage;
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    public Movie update(String title, Genre genre, int duration, String sinopsis, String classification, String director, String casting) {
+    public void update(String title, int duration, String sinopsis, UUID classificationId, String director, String casting, String urlImage) {
         var updateFlag = false;
         if (title != null && !title.isEmpty()) {
             this.title = title;
-            updateFlag = true;
-        }
-        if (genre != null) {
-            this.genre = genre;
             updateFlag = true;
         }
         if (duration > 0) {
@@ -93,8 +82,8 @@ public class Movie {
             this.sinopsis = sinopsis;
             updateFlag = true;
         }
-        if (classification != null && !classification.isEmpty()) {
-            this.classification = classification;
+        if (classificationId != null) {
+            this.classificationId = classificationId;
             updateFlag = true;
         }
         if (director != null && !director.isEmpty()) {
@@ -105,10 +94,13 @@ public class Movie {
             this.casting = casting;
             updateFlag = true;
         }
+        if (urlImage != null && !urlImage.isEmpty()) {
+            this.urlImage = urlImage;
+            updateFlag = true;
+        }
         if (updateFlag) {
             this.updatedAt = LocalDateTime.now();
         }
-        return this;
     }
 
     @Override
