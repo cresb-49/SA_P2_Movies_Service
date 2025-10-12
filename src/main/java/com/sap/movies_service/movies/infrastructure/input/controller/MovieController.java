@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,6 +29,7 @@ public class MovieController {
     private final FindMoviePort findMoviePort;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CINEMA_ADMIN')")
     public ResponseEntity<?> createMovie(
             @ModelAttribute CreateMovieRequestDTO createMovieRequestDTO,
             @RequestPart("image") MultipartFile image
@@ -37,6 +39,7 @@ public class MovieController {
     }
 
     @PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CINEMA_ADMIN')")
     public ResponseEntity<?> updateMovie(
             @PathVariable UUID id,
             @ModelAttribute UpdateMovieRequestDTO updateMovieRequestDTO,
@@ -47,17 +50,20 @@ public class MovieController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CINEMA_ADMIN')")
     public ResponseEntity<?> deleteMovie(@PathVariable UUID id) {
         deleteMoviePort.delete(id);
         return ResponseEntity.noContent().build();
     }
 
+    //Public endpoints
     @GetMapping("/{id}")
     public ResponseEntity<?> getMovieById(@PathVariable String id) {
         var result = findMoviePort.findById(id);
         return ResponseEntity.ok(result);
     }
 
+    //public endpoint to get movies by title (partial match) or genere id with pagination
     @GetMapping("/title/{title}")
     public ResponseEntity<?> getMoviesByTitle(
             @PathVariable String title,
@@ -67,6 +73,7 @@ public class MovieController {
         return ResponseEntity.ok(result);
     }
 
+    // public endpoint to get movies by genere id with pagination
     @GetMapping("/genere/{genereId}")
     public ResponseEntity<?> getMoviesByGenere(
             @PathVariable UUID genereId,
@@ -76,6 +83,7 @@ public class MovieController {
         return ResponseEntity.ok(result);
     }
 
+    //public endpoint to get all movies with pagination
     @GetMapping
     public ResponseEntity<?> getAllMovies(
             @RequestParam(name = "page", defaultValue = "0") int page

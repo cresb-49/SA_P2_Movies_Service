@@ -8,6 +8,7 @@ import com.sap.movies_service.movies.infrastructure.input.dtos.CreateGenreReques
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -23,6 +24,7 @@ public class GenreController {
     private final FindGenerePort findGenerePort;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CINEMA_ADMIN')")
     public ResponseEntity<?> createGenre(
             @RequestBody CreateGenreRequestDTO createGenreRequestDTO
     ) {
@@ -30,12 +32,14 @@ public class GenreController {
         return ResponseEntity.ok(result);
     }
 
+    //Public endpoints
     @GetMapping
     public ResponseEntity<?> getAllGenres() {
         var result = findGenerePort.findAll();
         return ResponseEntity.ok(result);
     }
 
+    //public endpoint
     @GetMapping("/{id}")
     public ResponseEntity<?> getGenreById(@PathVariable UUID id) {
         var result = findGenerePort.findById(id);
@@ -43,6 +47,7 @@ public class GenreController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CINEMA_ADMIN')")
     public ResponseEntity<?> deleteGenre(@PathVariable UUID id) {
         deleteGenerePort.delete(id);
         return ResponseEntity.noContent().build();
