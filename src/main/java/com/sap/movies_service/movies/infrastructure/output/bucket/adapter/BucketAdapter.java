@@ -1,6 +1,6 @@
 package com.sap.movies_service.movies.infrastructure.output.bucket.adapter;
 
-import com.sap.movies_service.config.infrastructure.input.port.BucketGatewayPort;
+import com.sap.movies_service.s3.infrastructure.input.port.BucketGatewayPort;
 import com.sap.movies_service.movies.application.output.DeletingImagePort;
 import com.sap.movies_service.movies.application.output.SaveImagePort;
 import lombok.AllArgsConstructor;

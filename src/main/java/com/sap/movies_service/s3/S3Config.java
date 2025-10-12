@@ -1,4 +1,4 @@
-package com.sap.movies_service.config;
+package com.sap.movies_service.s3;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

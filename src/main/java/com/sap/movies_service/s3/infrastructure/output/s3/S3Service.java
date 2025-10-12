@@ -1,6 +1,6 @@
-package com.sap.movies_service.config.infrastructure.output.s3;
+package com.sap.movies_service.s3.infrastructure.output.s3;
 
-import com.sap.movies_service.config.infrastructure.output.adapter.S3ServicePort;
+import com.sap.movies_service.s3.infrastructure.output.adapter.S3ServicePort;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.s3.S3Client;

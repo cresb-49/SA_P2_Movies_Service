@@ -1,4 +1,4 @@
-package com.sap.movies_service.config.infrastructure.output.adapter;
+package com.sap.movies_service.s3.infrastructure.output.adapter;
 
 import java.io.File;
 import java.io.IOException;
