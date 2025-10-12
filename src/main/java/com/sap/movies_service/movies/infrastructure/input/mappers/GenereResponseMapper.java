@@ -1,7 +1,7 @@
 package com.sap.movies_service.movies.infrastructure.input.mappers;
 
 import com.sap.movies_service.movies.domain.Genre;
-import com.sap.movies_service.movies.infrastructure.input.dtos.GenereResponseDTO;
+import com.sap.common_lib.dto.response.movie.GenereResponseDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

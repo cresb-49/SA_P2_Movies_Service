@@ -6,6 +6,7 @@ import com.sap.movies_service.movies.application.input.FindMoviePort;
 import com.sap.movies_service.movies.application.input.UpdateMoviePort;
 import com.sap.movies_service.movies.infrastructure.input.dtos.CreateMovieRequestDTO;
 import com.sap.movies_service.movies.infrastructure.input.dtos.UpdateMovieRequestDTO;
+import com.sap.movies_service.movies.infrastructure.input.mappers.MovieResponseMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
@@ -28,6 +29,8 @@ public class MovieController {
     private final DeleteMoviePort deleteMoviePort;
     private final FindMoviePort findMoviePort;
 
+    private final MovieResponseMapper movieResponseMapper;
+
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ADMIN') or hasRole('CINEMA_ADMIN')")
     public ResponseEntity<?> createMovie(
@@ -35,7 +38,7 @@ public class MovieController {
             @RequestPart("image") MultipartFile image
     ) throws IOException {
         var result = createMoviePort.create(createMovieRequestDTO.toDTO(image));
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(movieResponseMapper.toResponse(result));
     }
 
     @PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -46,7 +49,7 @@ public class MovieController {
             @RequestPart(value = "image", required = false) MultipartFile image
     ) throws IOException {
         var result = updateMoviePort.update(updateMovieRequestDTO.toDTO(id, image));
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(movieResponseMapper.toResponse(result));
     }
 
     @DeleteMapping("/{id}")
@@ -60,7 +63,7 @@ public class MovieController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getMovieById(@PathVariable String id) {
         var result = findMoviePort.findById(id);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(movieResponseMapper.toResponse(result));
     }
 
     //public endpoint to get movies by title (partial match) or genere id with pagination
@@ -70,7 +73,7 @@ public class MovieController {
             @RequestParam(name = "page", defaultValue = "0") int page
     ) {
         var result = findMoviePort.findByTitle(title, page);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(movieResponseMapper.toResponsePage(result));
     }
 
     // public endpoint to get movies by genere id with pagination
@@ -80,7 +83,7 @@ public class MovieController {
             @RequestParam(name = "page", defaultValue = "0") int page
     ) {
         var result = findMoviePort.findByGenere(genereId, page);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(movieResponseMapper.toResponsePage(result));
     }
 
     //public endpoint to get all movies with pagination
@@ -89,6 +92,6 @@ public class MovieController {
             @RequestParam(name = "page", defaultValue = "0") int page
     ) {
         var result = findMoviePort.findAll(page);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(movieResponseMapper.toResponsePage(result));
     }
 }
