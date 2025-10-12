@@ -1,5 +1,6 @@
 package com.sap.movies_service.movies.application.usecases.findgenere;
 
+import com.sap.common_lib.exception.NotFoundException;
 import com.sap.movies_service.movies.application.input.FindGenerePort;
 import com.sap.movies_service.movies.application.output.FindingGenerePort;
 import com.sap.movies_service.movies.domain.Genre;
@@ -20,7 +21,7 @@ public class FindGenereCase implements FindGenerePort {
     @Override
     public Genre findById(UUID id) {
         return findingGenerePort.findById(id).orElseThrow(
-                () -> new RuntimeException("Genere with id " + id + " does not exist")
+                () -> new NotFoundException("Genere with id " + id + " does not exist")
         );
     }
 

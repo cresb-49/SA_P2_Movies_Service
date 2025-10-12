@@ -1,5 +1,6 @@
 package com.sap.movies_service.movies.application.usecases.updatemovie;
 
+import com.sap.common_lib.exception.NotFoundException;
 import com.sap.movies_service.movies.application.input.UpdateMoviePort;
 import com.sap.movies_service.movies.application.output.*;
 import com.sap.movies_service.movies.application.usecases.updatemovie.dtos.UpdateMovieDTO;
@@ -36,7 +37,7 @@ public class UpdateMovieCase implements UpdateMoviePort {
         // If the update movie DTO contains an image, we need to delete the old image and upload the new one
         // In other case, do nothing
         Movie movie = findingMoviePort.findById(updateMovieDTO.getId())
-                .orElseThrow(() -> new RuntimeException("Movie not found"));
+                .orElseThrow(() -> new NotFoundException("Movie not found"));
         var updateImage = updateMovieDTO.getImage() != null && !updateMovieDTO.getImage().isEmpty();
         var now = System.currentTimeMillis();
         var oldUrlImage = movie.getUrlImage();
@@ -54,7 +55,7 @@ public class UpdateMovieCase implements UpdateMoviePort {
     private Movie updateMovieData(UpdateMovieDTO updateMovieDTO, Movie movie, boolean updateImage, Long now) {
         var genre = updateMovieDTO.getGenereId() != null ?
                 findingGenerePort.findById(updateMovieDTO.getGenereId())
-                        .orElseThrow(() -> new RuntimeException("Genere with id " + updateMovieDTO.getGenereId() + " does not exist"))
+                        .orElseThrow(() -> new NotFoundException("Genere with id " + updateMovieDTO.getGenereId() + " does not exist"))
                 : movie.getGenre();
         movie.update(
                 updateMovieDTO.getTitle(),
@@ -75,7 +76,7 @@ public class UpdateMovieCase implements UpdateMoviePort {
     private String parseImageData(MultipartFile image, Movie movie, Long timestamp) {
         var originalFilename = image.getOriginalFilename();
         if (originalFilename == null || originalFilename.isEmpty()) {
-            throw new RuntimeException("Image must have a name");
+            throw new IllegalStateException("Image must have a name");
         }
         // Name of the image file is a UUID of the movie + extension
         var imageName = movie.getId().toString() + "-" + timestamp.toString();
@@ -89,7 +90,7 @@ public class UpdateMovieCase implements UpdateMoviePort {
         try {
             var originalFilename = image.getOriginalFilename();
             if (originalFilename == null || originalFilename.isEmpty()) {
-                throw new RuntimeException("Image must have a name");
+                throw new IllegalStateException("Image must have a name");
             }
             var imageName = movie.getId().toString() + "-" + timestamp.toString();
             var extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);

@@ -1,5 +1,6 @@
 package com.sap.movies_service.movies.application.usecases.findmovie;
 
+import com.sap.common_lib.exception.NotFoundException;
 import com.sap.movies_service.movies.application.input.FindMoviePort;
 import com.sap.movies_service.movies.application.output.FindingMoviePort;
 import com.sap.movies_service.movies.domain.Movie;
@@ -20,7 +21,9 @@ public class FindMovieCase implements FindMoviePort {
 
     @Override
     public Movie findById(String id) {
-        return findingMoviePort.findById(UUID.fromString(id)).orElse(null);
+        return findingMoviePort.findById(UUID.fromString(id)).orElseThrow(
+                () -> new NotFoundException("Movie with id " + id + " does not exist")
+        );
     }
 
     @Override

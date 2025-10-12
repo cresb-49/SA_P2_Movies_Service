@@ -1,5 +1,6 @@
 package com.sap.movies_service.movies.application.usecases.createmovie;
 
+import com.sap.common_lib.exception.NotFoundException;
 import com.sap.movies_service.movies.application.input.CreateMoviePort;
 import com.sap.movies_service.movies.application.output.FindingGenerePort;
 import com.sap.movies_service.movies.application.output.SaveImagePort;
@@ -36,14 +37,14 @@ public class CreateMovieCase implements CreateMoviePort {
     @Override
     public Movie create(CreateMovieDTO createMovieDTO) {
         if (createMovieDTO.getImage().isEmpty()) {
-            throw new RuntimeException("Image is required");
+            throw new IllegalArgumentException("Image is required");
         }
         if (!List.of("image/png", "image/jpg", "image/jpeg").contains(createMovieDTO.getImage().getContentType())) {
-            throw new RuntimeException("Image must be png, jpg or jpeg");
+            throw new IllegalArgumentException("Image must be png, jpg or jpeg");
         }
         // Check if the genere exists
         Genre genre = findingGenerePort.findById(createMovieDTO.getGenereId())
-                .orElseThrow(() -> new RuntimeException("Genere with id " + createMovieDTO.getGenereId() + " does not exist"));
+                .orElseThrow(() -> new NotFoundException("Genere with id " + createMovieDTO.getGenereId() + " does not exist"));
         // Create a Movie domain object
         Movie movie = new Movie(
                 createMovieDTO.getTitle(),
@@ -71,7 +72,7 @@ public class CreateMovieCase implements CreateMoviePort {
     private String parseImageData(MultipartFile image, Movie movie,Long timestamp) {
         var originalFilename = image.getOriginalFilename();
         if (originalFilename == null || originalFilename.isEmpty()) {
-            throw new RuntimeException("Image must have a name");
+            throw new IllegalStateException("Image must have a name");
         }
         // Name of the image file is a UUID of the movie + extension
         var imageName = movie.getId().toString() + "-" + timestamp.toString();
@@ -85,7 +86,7 @@ public class CreateMovieCase implements CreateMoviePort {
         try {
             var originalFilename = image.getOriginalFilename();
             if (originalFilename == null || originalFilename.isEmpty()) {
-                throw new RuntimeException("Image must have a name");
+                throw new IllegalStateException("Image must have a name");
             }
             var imageName = movie.getId().toString() + "-" + timestamp.toString();
             var extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);

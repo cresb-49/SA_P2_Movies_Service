@@ -23,7 +23,7 @@ public class DeleteGenreCase implements DeleteGenerePort {
     public void delete(UUID id) {
         findingGenerePort.findById(id).orElseThrow(() -> new RuntimeException("Genre not found"));
         if(findingMoviePort.existsByGenreId(id)) {
-            throw new RuntimeException("Cannot delete genre with associated movies");
+            throw new IllegalStateException("Cannot delete genre with associated movies");
         }
         deletingGenerePort.deleteById(id);
     }

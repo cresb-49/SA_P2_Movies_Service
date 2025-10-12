@@ -1,5 +1,6 @@
 package com.sap.movies_service.movies.application.usecases.deletemovie;
 
+import com.sap.common_lib.exception.NotFoundException;
 import com.sap.movies_service.movies.application.input.DeleteMoviePort;
 import com.sap.movies_service.movies.application.output.DeletingImagePort;
 import com.sap.movies_service.movies.application.output.DeletingMoviePort;
@@ -31,7 +32,7 @@ public class DeleteMovieCase implements DeleteMoviePort {
     @Override
     public void delete(UUID id) {
         Movie movie = findingMoviePort.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("Movie with id " + id + " does not exist")
+                () -> new NotFoundException("Movie with id " + id + " does not exist")
         );
         deletingMoviePort.deleteMovieById(id);
         deleteImageFromS3(movie);
@@ -41,7 +42,7 @@ public class DeleteMovieCase implements DeleteMoviePort {
         try {
             var urlImage = movie.getUrlImage();
             if (urlImage == null || urlImage.isEmpty()) {
-                throw new RuntimeException("Movie does not have an image to delete");
+                throw new IllegalStateException("Movie does not have an image to delete");
             }
             // Extract the key from the urlImage
             var key = urlImage.substring(urlImage.lastIndexOf("/") + 1);

@@ -1,5 +1,6 @@
 package com.sap.movies_service.movies.application.usecases.creategenere;
 
+import com.sap.common_lib.exception.EntityAlreadyExistsException;
 import com.sap.movies_service.movies.application.input.CreateGenerePort;
 import com.sap.movies_service.movies.application.output.FindingGenerePort;
 import com.sap.movies_service.movies.application.output.SaveGenerePort;
@@ -21,7 +22,7 @@ public class CreateGenereCase implements CreateGenerePort {
     public Genre create(CreateGenereDTO createGenereDTO) {
         findingGenerePort.findByName(createGenereDTO.getName())
                 .ifPresent(g -> {
-                    throw new IllegalArgumentException("Genere with name " + createGenereDTO.getName() + " already exists");
+                    throw new EntityAlreadyExistsException("Genere with name " + createGenereDTO.getName() + " already exists");
                 });
         Genre genre = new Genre(createGenereDTO.getName());
         return saveGenerePort.save(genre);
