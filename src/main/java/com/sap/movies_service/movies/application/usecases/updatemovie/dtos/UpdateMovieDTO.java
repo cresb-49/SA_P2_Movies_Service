@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -11,7 +12,8 @@ import java.util.UUID;
 public class UpdateMovieDTO {
     private UUID id;
     private String title;
-    private UUID genereId;
+    private UUID classificationId;
+    private List<UUID> categoryIds;
     private int duration;
     private String sinopsis;
     private String classification;

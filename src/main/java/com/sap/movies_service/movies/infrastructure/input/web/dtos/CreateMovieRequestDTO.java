@@ -4,12 +4,14 @@ import com.sap.movies_service.movies.application.usecases.createmovie.dtos.Creat
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
 public class CreateMovieRequestDTO {
     private String title;
-    private UUID genereId;
+    private UUID classificationId;
+    private List<UUID> categoreIds;
     private int duration;
     private String sinopsis;
     private String classification;
@@ -17,6 +19,6 @@ public class CreateMovieRequestDTO {
     private String casting;
 
     public CreateMovieDTO toDTO(MultipartFile image) {
-        return new CreateMovieDTO(title, genereId, duration, sinopsis, classification, director, casting, image);
+        return new CreateMovieDTO(title, classificationId, categoreIds, duration, sinopsis, classification, director, casting, image);
     }
 }
