@@ -3,11 +3,9 @@ package com.sap.movies_service.movies.application.usecases.createmovie;
 import com.sap.common_lib.exception.NotFoundException;
 import com.sap.movies_service.movies.application.factory.MovieFactory;
 import com.sap.movies_service.movies.application.input.CreateMoviePort;
-import com.sap.movies_service.movies.application.output.FindingCategoriesPort;
-import com.sap.movies_service.movies.application.output.FindingClassificationPort;
-import com.sap.movies_service.movies.application.output.SaveImagePort;
-import com.sap.movies_service.movies.application.output.SaveMoviePort;
+import com.sap.movies_service.movies.application.output.*;
 import com.sap.movies_service.movies.application.usecases.createmovie.dtos.CreateMovieDTO;
+import com.sap.movies_service.movies.domain.CategoryMovie;
 import com.sap.movies_service.movies.domain.Movie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +33,7 @@ public class CreateMovieCase implements CreateMoviePort {
     private final SaveImagePort saveImagePort;
     private final FindingCategoriesPort findingCategoriesPort;
     private final FindingClassificationPort findingClassificationPort;
+    private final SaveCategoriesMoviePort saveCategoriesMoviePort;
     private final MovieFactory movieFactory;
 
     @Override
@@ -74,10 +73,15 @@ public class CreateMovieCase implements CreateMoviePort {
         );
         // Validate the movie
         movie.validated();
-        // Upload the image to S3
-        this.uploadImageToS3(createMovieDTO.getImage(), now);
         // Save the movie to the database
         Movie savedMovie = saveMoviePort.save(movie);
+        // Save the categories of the movie
+        List<CategoryMovie> categoryMovies = categories.stream()
+                .map(ca -> new CategoryMovie(savedMovie.getId(), ca.id()))
+                .toList();
+        saveCategoriesMoviePort.saveCategoriesMovie(categoryMovies);
+        // Upload the image to S3
+        this.uploadImageToS3(createMovieDTO.getImage(), now);
         // Return the movie with all relations
         return movieFactory.movieWithAllRelations(savedMovie);
     }
