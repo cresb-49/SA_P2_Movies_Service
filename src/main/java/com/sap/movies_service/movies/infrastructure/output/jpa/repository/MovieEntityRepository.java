@@ -18,4 +18,6 @@ public interface MovieEntityRepository extends JpaRepository<MovieEntity, UUID> 
     List<MovieEntity> findByIdIn(List<UUID> ids);
 
     Page<MovieEntity> findByTitleContainingIgnoreCase(String title, Pageable pageable);
+
+    boolean  existsByClassificationId(UUID id);
 }

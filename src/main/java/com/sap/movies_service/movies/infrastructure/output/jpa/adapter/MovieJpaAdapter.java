@@ -23,6 +23,11 @@ public class MovieJpaAdapter implements FindingMoviePort, SaveMoviePort, Deletin
     private final MovieMapper movieMapper;
 
     @Override
+    public boolean existsById(UUID id) {
+        return movieEntityRepository.existsById(id);
+    }
+
+    @Override
     public Optional<Movie> findById(UUID id) {
         return movieEntityRepository.findById(id).map(movieMapper::toDomain);
     }
@@ -48,6 +53,11 @@ public class MovieJpaAdapter implements FindingMoviePort, SaveMoviePort, Deletin
     public List<Movie> findByIdsIn(List<UUID> ids) {
         var entities = movieEntityRepository.findByIdIn(ids);
         return entities.stream().map(movieMapper::toDomain).toList();
+    }
+
+    @Override
+    public boolean hasMoviesWithClassificationId(UUID id) {
+        return movieEntityRepository.existsByClassificationId(id);
     }
 
     @Override

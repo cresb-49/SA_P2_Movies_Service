@@ -21,6 +21,11 @@ public class Category {
         this.updatedAt = LocalDateTime.now();
     }
 
+    public void update(String name) {
+        this.name = name;
+        this.updatedAt = LocalDateTime.now();
+    }
+
     public void validate() {
         if (this.name == null || this.name.isEmpty()) {
             throw new IllegalArgumentException("Category name cannot be null or empty");

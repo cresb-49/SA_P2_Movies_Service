@@ -7,7 +7,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface FindCategoryPort {
+    boolean existsById(UUID id);
     Optional<Category> findById(UUID id);
     Optional<Category> findByNameInsensitive(String name);
+    Optional<Category> findByNameInsensitive(String name, UUID excludeId);
     List<Category> findInIds(List<UUID> ids);
+    List<Category> findAll();
+    List<Category> findCategoriesByNameInsensitive(String name);
 }
