@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -15,6 +16,7 @@ public class Movie {
     private int duration;
     private String sinopsis;
     private UUID classificationId;
+    private List<UUID> categoryIds;
     private String director;
     private String casting;
     private String urlImage;
@@ -27,6 +29,7 @@ public class Movie {
             int duration,
             String sinopsis,
             UUID classificationId,
+            List<UUID> categoryIds,
             String director,
             String casting,
             String urlImage
@@ -36,6 +39,7 @@ public class Movie {
         this.duration = duration;
         this.sinopsis = sinopsis;
         this.classificationId = classificationId;
+        this.categoryIds = categoryIds;
         this.director = director;
         this.casting = casting;
         this.active = true;
@@ -57,6 +61,9 @@ public class Movie {
         if (this.classificationId == null) {
             throw new IllegalArgumentException("Classification is required");
         }
+        if (this.categoryIds == null || this.categoryIds.isEmpty()) {
+            throw new IllegalArgumentException("At least one category is required");
+        }
         if (this.director == null || this.director.isEmpty()) {
             throw new IllegalArgumentException("Director is required");
         }
@@ -68,7 +75,7 @@ public class Movie {
         }
     }
 
-    public void update(String title, int duration, String sinopsis, UUID classificationId, String director, String casting, String urlImage) {
+    public void update(String title, int duration, String sinopsis, UUID classificationId, List<UUID> categoryIds, String director, String casting, String urlImage) {
         var updateFlag = false;
         if (title != null && !title.isEmpty()) {
             this.title = title;
@@ -84,6 +91,10 @@ public class Movie {
         }
         if (classificationId != null) {
             this.classificationId = classificationId;
+            updateFlag = true;
+        }
+        if (categoryIds != null && !categoryIds.isEmpty()) {
+            this.categoryIds = categoryIds;
             updateFlag = true;
         }
         if (director != null && !director.isEmpty()) {

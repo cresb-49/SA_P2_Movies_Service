@@ -1,6 +1,9 @@
 package com.sap.movies_service.movies.application.usecases.createmovie;
 
+import com.sap.common_lib.exception.NotFoundException;
 import com.sap.movies_service.movies.application.input.CreateMoviePort;
+import com.sap.movies_service.movies.application.output.FindingCategoriesPort;
+import com.sap.movies_service.movies.application.output.FindingClassificationPort;
 import com.sap.movies_service.movies.application.output.SaveImagePort;
 import com.sap.movies_service.movies.application.output.SaveMoviePort;
 import com.sap.movies_service.movies.application.usecases.createmovie.dtos.CreateMovieDTO;
@@ -29,9 +32,23 @@ public class CreateMovieCase implements CreateMoviePort {
 
     private final SaveMoviePort saveMoviePort;
     private final SaveImagePort saveImagePort;
+    private final FindingCategoriesPort findingCategoriesPort;
+    private final FindingClassificationPort findingClassificationPort;
 
     @Override
     public Movie create(CreateMovieDTO createMovieDTO) {
+        // Verify if classificationId exists
+        var existsClassification = findingClassificationPort.existsById(createMovieDTO.getClassificationId());
+        if (!existsClassification) {
+            throw new NotFoundException("Selected classification does not exist");
+        }
+        // Verify if categoriesId exists
+        var categories = findingCategoriesPort.findAllById(createMovieDTO.getCategoriesId());
+        if (categories.size() != createMovieDTO.getCategoriesId().size()) {
+            var diffCount = createMovieDTO.getCategoriesId().size() - categories.size();
+            throw new NotFoundException(diffCount + " selected categories do not exist");
+        }
+        // Validate image
         if (createMovieDTO.getImage().isEmpty()) {
             throw new IllegalArgumentException("Image is required");
         }
@@ -41,13 +58,14 @@ public class CreateMovieCase implements CreateMoviePort {
         // Generation timestamp
         var now = System.currentTimeMillis();
         // Generate the urlImage
-        var urlImage = parseImageData(createMovieDTO.getImage(),now);
+        var urlImage = parseImageData(createMovieDTO.getImage(), now);
         // Create a Movie domain object
         Movie movie = new Movie(
                 createMovieDTO.getTitle(),
                 createMovieDTO.getDuration(),
                 createMovieDTO.getSinopsis(),
-                null,
+                createMovieDTO.getClassificationId(),
+                createMovieDTO.getCategoriesId(),
                 createMovieDTO.getDirector(),
                 createMovieDTO.getCasting(),
                 urlImage
@@ -60,7 +78,7 @@ public class CreateMovieCase implements CreateMoviePort {
         return saveMoviePort.save(movie);
     }
 
-    private String parseImageData(MultipartFile image,Long timestamp) {
+    private String parseImageData(MultipartFile image, Long timestamp) {
         var originalFilename = image.getOriginalFilename();
         if (originalFilename == null || originalFilename.isEmpty()) {
             throw new IllegalStateException("Image must have a name");
@@ -73,7 +91,7 @@ public class CreateMovieCase implements CreateMoviePort {
         return "https://" + bucketName + ".s3." + awsRegion + ".amazonaws.com/" + bucketDirectory + "/" + imageName + "." + extension;
     }
 
-    private void uploadImageToS3(MultipartFile image,Long timestamp) {
+    private void uploadImageToS3(MultipartFile image, Long timestamp) {
         try {
             var originalFilename = image.getOriginalFilename();
             if (originalFilename == null || originalFilename.isEmpty()) {

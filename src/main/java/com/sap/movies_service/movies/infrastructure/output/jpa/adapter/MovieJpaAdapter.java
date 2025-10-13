@@ -2,9 +2,11 @@ package com.sap.movies_service.movies.infrastructure.output.jpa.adapter;
 
 import com.sap.movies_service.movies.application.output.DeletingMoviePort;
 import com.sap.movies_service.movies.application.output.FindingMoviePort;
+import com.sap.movies_service.movies.application.output.SaveCategoriesMoviePort;
 import com.sap.movies_service.movies.application.output.SaveMoviePort;
 import com.sap.movies_service.movies.domain.Movie;
 import com.sap.movies_service.movies.infrastructure.output.jpa.mapper.MovieMapper;
+import com.sap.movies_service.movies.infrastructure.output.jpa.repository.CategoryMovieEntityRepository;
 import com.sap.movies_service.movies.infrastructure.output.jpa.repository.MovieEntityRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,6 +22,7 @@ import java.util.UUID;
 public class MovieJpaAdapter implements FindingMoviePort, SaveMoviePort, DeletingMoviePort {
 
     private final MovieEntityRepository movieEntityRepository;
+    private final CategoryMovieEntityRepository categoryMovieEntityRepository;
     private final MovieMapper movieMapper;
 
     @Override
@@ -64,6 +67,7 @@ public class MovieJpaAdapter implements FindingMoviePort, SaveMoviePort, Deletin
     public Movie save(Movie movie) {
         var entity = movieMapper.toEntity(movie);
         var savedEntity = movieEntityRepository.save(entity);
+        categoryMovieEntityRepository.sa
         return movieMapper.toDomain(savedEntity);
     }
 
