@@ -1,5 +1,6 @@
 package com.sap.movies_service.movies.application.input;
 
+import com.sap.movies_service.movies.application.usecases.findmovie.dtos.MovieFilter;
 import com.sap.movies_service.movies.domain.Movie;
 import org.springframework.data.domain.Page;
 
@@ -13,5 +14,8 @@ public interface FindMoviePort {
 
     Page<Movie> findAll(int page);
 
+    Page<Movie> findByFilter(MovieFilter filter, int page);
+
     List<Movie> findByIdsIn(List<UUID> ids);
+
 }

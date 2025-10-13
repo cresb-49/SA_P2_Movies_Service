@@ -4,6 +4,7 @@ import com.sap.common_lib.exception.NotFoundException;
 import com.sap.movies_service.movies.application.factory.MovieFactory;
 import com.sap.movies_service.movies.application.input.FindMoviePort;
 import com.sap.movies_service.movies.application.output.FindingMoviePort;
+import com.sap.movies_service.movies.application.usecases.findmovie.dtos.MovieFilter;
 import com.sap.movies_service.movies.domain.Movie;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -40,6 +41,12 @@ public class FindMovieCase implements FindMoviePort {
     public Page<Movie> findAll(int page) {
 
         var result = findingMoviePort.findAll(page);
+        return movieFactory.moviesWithAllRelations(result);
+    }
+
+    @Override
+    public Page<Movie> findByFilter(MovieFilter filter, int page) {
+        var result = findingMoviePort.findByFilter(filter, page);
         return movieFactory.moviesWithAllRelations(result);
     }
 

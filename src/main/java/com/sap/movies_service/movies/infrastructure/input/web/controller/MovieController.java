@@ -4,6 +4,7 @@ import com.sap.movies_service.movies.application.input.CreateMoviePort;
 import com.sap.movies_service.movies.application.input.DeleteMoviePort;
 import com.sap.movies_service.movies.application.input.FindMoviePort;
 import com.sap.movies_service.movies.application.input.UpdateMoviePort;
+import com.sap.movies_service.movies.application.usecases.findmovie.dtos.MovieFilter;
 import com.sap.movies_service.movies.infrastructure.input.web.dtos.CreateMovieRequestDTO;
 import com.sap.movies_service.movies.infrastructure.input.web.dtos.UpdateMovieRequestDTO;
 import com.sap.movies_service.movies.infrastructure.input.web.mappers.MovieResponseMapper;
@@ -79,6 +80,21 @@ public class MovieController {
     //public endpoint to get all movies with pagination
     @GetMapping
     public ResponseEntity<?> getAllMovies(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "active", required = false) Boolean active,
+            @RequestParam(name = "classificationId", required = false) UUID classificationId,
+            @RequestParam(name = "categoryIds", required = false) String categoryIds // comma separated UUIDs
+    ) {
+        var ids = categoryIds != null && !categoryIds.isBlank() ?
+                categoryIds.lines().map(UUID::fromString).toList() : null;
+        var filer = new MovieFilter(name, active, classificationId, ids);
+        var result = findMoviePort.findByFilter(filer, page);
+        return ResponseEntity.ok(movieResponseMapper.toResponsePage(result));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllMoviesNoPagination(
             @RequestParam(name = "page", defaultValue = "0") int page
     ) {
         var result = findMoviePort.findAll(page);
