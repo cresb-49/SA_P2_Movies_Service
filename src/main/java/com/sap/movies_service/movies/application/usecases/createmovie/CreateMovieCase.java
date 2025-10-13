@@ -1,6 +1,7 @@
 package com.sap.movies_service.movies.application.usecases.createmovie;
 
 import com.sap.common_lib.exception.NotFoundException;
+import com.sap.movies_service.movies.application.factory.MovieFactory;
 import com.sap.movies_service.movies.application.input.CreateMoviePort;
 import com.sap.movies_service.movies.application.output.FindingCategoriesPort;
 import com.sap.movies_service.movies.application.output.FindingClassificationPort;
@@ -34,6 +35,7 @@ public class CreateMovieCase implements CreateMoviePort {
     private final SaveImagePort saveImagePort;
     private final FindingCategoriesPort findingCategoriesPort;
     private final FindingClassificationPort findingClassificationPort;
+    private final MovieFactory movieFactory;
 
     @Override
     public Movie create(CreateMovieDTO createMovieDTO) {
@@ -75,7 +77,9 @@ public class CreateMovieCase implements CreateMoviePort {
         // Upload the image to S3
         this.uploadImageToS3(createMovieDTO.getImage(), now);
         // Save the movie to the database
-        return saveMoviePort.save(movie);
+        Movie savedMovie = saveMoviePort.save(movie);
+        // Return the movie with all relations
+        return movieFactory.movieWithAllRelations(savedMovie);
     }
 
     private String parseImageData(MultipartFile image, Long timestamp) {

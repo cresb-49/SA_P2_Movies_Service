@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -12,7 +13,8 @@ import java.util.UUID;
 public class UpdateMovieRequestDTO {
     private UUID id;
     private String title;
-    private UUID genereId;
+    private UUID classificationId;
+    private List<UUID> categoryIds;
     private int duration;
     private String sinopsis;
     private String classification;
@@ -21,6 +23,6 @@ public class UpdateMovieRequestDTO {
     private MultipartFile image;
 
     public UpdateMovieDTO toDTO(UUID id, MultipartFile image) {
-        return new UpdateMovieDTO(id, title, genereId, duration, sinopsis, classification, director, casting, image);
+        return new UpdateMovieDTO(id, title, classificationId, categoryIds, duration, sinopsis, classification, director, casting, image);
     }
 }

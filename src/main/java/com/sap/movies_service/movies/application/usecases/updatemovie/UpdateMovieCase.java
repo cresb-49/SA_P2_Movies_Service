@@ -1,11 +1,14 @@
 package com.sap.movies_service.movies.application.usecases.updatemovie;
 
 import com.sap.common_lib.exception.NotFoundException;
+import com.sap.movies_service.movies.application.factory.MovieFactory;
 import com.sap.movies_service.movies.application.input.UpdateMoviePort;
-import com.sap.movies_service.movies.application.output.*;
+import com.sap.movies_service.movies.application.output.DeletingImagePort;
+import com.sap.movies_service.movies.application.output.FindingMoviePort;
+import com.sap.movies_service.movies.application.output.SaveImagePort;
+import com.sap.movies_service.movies.application.output.SaveMoviePort;
 import com.sap.movies_service.movies.application.usecases.updatemovie.dtos.UpdateMovieDTO;
 import com.sap.movies_service.movies.domain.Movie;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -30,6 +33,7 @@ public class UpdateMovieCase implements UpdateMoviePort {
     private final SaveImagePort saveImagePort;
     private final DeletingImagePort deletingImagePort;
     private final SaveMoviePort saveMoviePort;
+    private final MovieFactory movieFactory;
 
     @Override
     public Movie update(UpdateMovieDTO updateMovieDTO) {
@@ -44,23 +48,24 @@ public class UpdateMovieCase implements UpdateMoviePort {
         //Validate the movie
         updatedMovie.validated();
         //Update image if needed
-        if(updateImage) {
+        if (updateImage) {
             uploadImageToS3(updateMovieDTO.getImage(), movie, now);
             deleteImageFromS3(oldUrlImage);
         }
-        return saveMoviePort.save(updatedMovie);
+        var savedMovie = saveMoviePort.save(updatedMovie);
+        return movieFactory.movieWithAllRelations(savedMovie);
     }
 
     private Movie updateMovieData(UpdateMovieDTO updateMovieDTO, Movie movie, boolean updateImage, Long now) {
         var urlImage = movie.getUrlImage();
-        if(updateImage) {
+        if (updateImage) {
             urlImage = parseImageData(updateMovieDTO.getImage(), movie, now);
         }
         movie.update(
                 updateMovieDTO.getTitle(),
                 updateMovieDTO.getDuration(),
                 updateMovieDTO.getSinopsis(),
-                null,
+                updateMovieDTO.getClassificationId(),
                 updateMovieDTO.getDirector(),
                 updateMovieDTO.getCasting(),
                 urlImage
@@ -81,7 +86,7 @@ public class UpdateMovieCase implements UpdateMoviePort {
         return "https://" + bucketName + ".s3." + awsRegion + ".amazonaws.com/" + bucketDirectory + "/" + imageName + "." + extension;
     }
 
-    private void uploadImageToS3(MultipartFile image, Movie movie,Long timestamp) {
+    private void uploadImageToS3(MultipartFile image, Movie movie, Long timestamp) {
         try {
             var originalFilename = image.getOriginalFilename();
             if (originalFilename == null || originalFilename.isEmpty()) {

@@ -22,7 +22,6 @@ import java.util.UUID;
 public class MovieJpaAdapter implements FindingMoviePort, SaveMoviePort, DeletingMoviePort {
 
     private final MovieEntityRepository movieEntityRepository;
-    private final CategoryMovieEntityRepository categoryMovieEntityRepository;
     private final MovieMapper movieMapper;
 
     @Override
@@ -67,7 +66,6 @@ public class MovieJpaAdapter implements FindingMoviePort, SaveMoviePort, Deletin
     public Movie save(Movie movie) {
         var entity = movieMapper.toEntity(movie);
         var savedEntity = movieEntityRepository.save(entity);
-        categoryMovieEntityRepository.sa
         return movieMapper.toDomain(savedEntity);
     }
 
