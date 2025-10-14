@@ -31,13 +31,6 @@ public class FindMovieCase implements FindMoviePort {
     }
 
     @Override
-    public Page<Movie> findByTitle(String title, int page) {
-
-        var result = findingMoviePort.findLikeTitle(title, page);
-        return movieFactory.moviesWithAllRelations(result);
-    }
-
-    @Override
     public Page<Movie> findAll(int page) {
 
         var result = findingMoviePort.findAll(page);

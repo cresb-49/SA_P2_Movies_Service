@@ -46,15 +46,6 @@ public class MovieJpaAdapter implements FindingMoviePort, SaveMoviePort, Deletin
     }
 
     @Override
-    public Page<Movie> findLikeTitle(String title, int page) {
-        var result = movieEntityRepository.findByTitleContainingIgnoreCase(
-                title,
-                PageRequest.of(page, 20)
-        );
-        return result.map(movieMapper::toDomain);
-    }
-
-    @Override
     public Page<Movie> findByFilter(MovieFilter filter, int page) {
         var spec = MovieEntitySpecs.byFilter(filter);
         var result = movieEntityRepository.findAll(spec, PageRequest.of(page, 20, Sort.by(Sort.Direction.DESC, "createdAt")));

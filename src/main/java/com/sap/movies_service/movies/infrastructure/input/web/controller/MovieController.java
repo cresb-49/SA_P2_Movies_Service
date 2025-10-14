@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -67,28 +68,20 @@ public class MovieController {
         return ResponseEntity.ok(movieResponseMapper.toResponse(result));
     }
 
-    //public endpoint to get movies by title (partial match) or genere id with pagination
-    @GetMapping("/title/{title}")
-    public ResponseEntity<?> getMoviesByTitle(
-            @PathVariable String title,
-            @RequestParam(name = "page", defaultValue = "0") int page
-    ) {
-        var result = findMoviePort.findByTitle(title, page);
-        return ResponseEntity.ok(movieResponseMapper.toResponsePage(result));
-    }
-
     //public endpoint to get all movies with pagination
     @GetMapping("/search")
     public ResponseEntity<?> getAllMovies(
             @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "title", required = false) String title,
             @RequestParam(name = "active", required = false) Boolean active,
             @RequestParam(name = "classificationId", required = false) UUID classificationId,
             @RequestParam(name = "categoryIds", required = false) String categoryIds // comma separated UUIDs
     ) {
         var ids = categoryIds != null && !categoryIds.isBlank() ?
-                categoryIds.lines().map(UUID::fromString).toList() : null;
-        var filer = new MovieFilter(name, active, classificationId, ids);
+                categoryIds.split(",") : null;
+        List<UUID> resultIds = ids != null ?
+                java.util.Arrays.stream(ids).map(UUID::fromString).toList() : null;
+        var filer = new MovieFilter(title, active, classificationId, resultIds);
         var result = findMoviePort.findByFilter(filer, page);
         return ResponseEntity.ok(movieResponseMapper.toResponsePage(result));
     }
@@ -99,5 +92,11 @@ public class MovieController {
     ) {
         var result = findMoviePort.findAll(page);
         return ResponseEntity.ok(movieResponseMapper.toResponsePage(result));
+    }
+
+    @PostMapping("/ids")
+    public ResponseEntity<?> getMoviesByIds(@RequestBody List<UUID> ids) {
+        var result = findMoviePort.findByIdsIn(ids);
+        return ResponseEntity.ok(movieResponseMapper.toResponseList(result));
     }
 }

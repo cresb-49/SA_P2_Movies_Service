@@ -25,6 +25,7 @@ public class MovieResponseMapper {
                 movie.getDirector(),
                 movie.getCasting(),
                 movie.getUrlImage(),
+                movie.isActive(),
                 movie.getCreatedAt(),
                 movie.getUpdatedAt(),
                 classificationViewResponseMapper.toResponse(movie.getClassification()),

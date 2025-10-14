@@ -10,8 +10,6 @@ import java.util.UUID;
 public interface FindMoviePort {
     Movie findById(String id);
 
-    Page<Movie> findByTitle(String title, int page);
-
     Page<Movie> findAll(int page);
 
     Page<Movie> findByFilter(MovieFilter filter, int page);
