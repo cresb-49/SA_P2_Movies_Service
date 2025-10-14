@@ -78,7 +78,7 @@ public class MovieController {
     }
 
     //public endpoint to get all movies with pagination
-    @GetMapping
+    @GetMapping("/search")
     public ResponseEntity<?> getAllMovies(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "name", required = false) String name,
