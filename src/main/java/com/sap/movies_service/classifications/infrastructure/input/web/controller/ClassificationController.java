@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@RestController
 @RequestMapping("/api/v1/classifications")
 @AllArgsConstructor
 public class ClassificationController {
@@ -26,7 +27,7 @@ public class ClassificationController {
     private final ClassificationResponseMapper classificationResponseMapper;
 
     // public endpoints
-    @GetMapping("/{id")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable UUID id) {
         var classification = findClassificationCasePort.findById(id);
         var response = classificationResponseMapper.toDTO(classification);
@@ -41,7 +42,7 @@ public class ClassificationController {
         return ResponseEntity.status(201).body(response);
     }
 
-    @DeleteMapping("/{id")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> delete(@PathVariable UUID id) {
         deleteCategoryCasePort.deleteById(id);
