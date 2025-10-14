@@ -36,7 +36,7 @@ public class CategoryController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> create(CreateCategoryRequestDTO request) {
+    public ResponseEntity<?> create(@RequestBody CreateCategoryRequestDTO request) {
         var category = createCategoryCasePort.create(request.name());
         var response = categoryResponseMapper.toDTO(category);
         return ResponseEntity.status(201).body(response);
@@ -44,7 +44,7 @@ public class CategoryController {
 
     @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> update(@PathVariable UUID id, UpdateCategoryRequestDTO request) {
+    public ResponseEntity<?> update(@PathVariable UUID id,@RequestBody UpdateCategoryRequestDTO request) {
         var category = updateCategoryCasePort.update(request.toDTO(id));
         var response = categoryResponseMapper.toDTO(category);
         return ResponseEntity.ok(response);
