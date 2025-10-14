@@ -1,9 +1,6 @@
 package com.sap.movies_service.movies.infrastructure.input.web.controller;
 
-import com.sap.movies_service.movies.application.input.CreateMoviePort;
-import com.sap.movies_service.movies.application.input.DeleteMoviePort;
-import com.sap.movies_service.movies.application.input.FindMoviePort;
-import com.sap.movies_service.movies.application.input.UpdateMoviePort;
+import com.sap.movies_service.movies.application.input.*;
 import com.sap.movies_service.movies.application.usecases.findmovie.dtos.MovieFilter;
 import com.sap.movies_service.movies.infrastructure.input.web.dtos.CreateMovieRequestDTO;
 import com.sap.movies_service.movies.infrastructure.input.web.dtos.UpdateMovieRequestDTO;
@@ -30,6 +27,7 @@ public class MovieController {
     private final UpdateMoviePort updateMoviePort;
     private final DeleteMoviePort deleteMoviePort;
     private final FindMoviePort findMoviePort;
+    private final ChangeStatePort changeStatePort;
 
     private final MovieResponseMapper movieResponseMapper;
 
@@ -92,6 +90,13 @@ public class MovieController {
     ) {
         var result = findMoviePort.findAll(page);
         return ResponseEntity.ok(movieResponseMapper.toResponsePage(result));
+    }
+
+    @PatchMapping("/state/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> changeMovieState(@PathVariable UUID id) {
+        var result = changeStatePort.changeState(id);
+        return ResponseEntity.ok(movieResponseMapper.toResponse(result));
     }
 
     @PostMapping("/ids")

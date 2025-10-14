@@ -1,6 +1,7 @@
 package com.sap.movies_service.movies.application.usecases.changestate;
 
 import com.sap.common_lib.exception.NotFoundException;
+import com.sap.movies_service.movies.application.factory.MovieFactory;
 import com.sap.movies_service.movies.application.input.ChangeStatePort;
 import com.sap.movies_service.movies.application.output.FindingMoviePort;
 import com.sap.movies_service.movies.application.output.SaveMoviePort;
@@ -18,6 +19,7 @@ public class ChangeStateCase implements ChangeStatePort {
 
     private final FindingMoviePort findingMoviePort;
     private final SaveMoviePort saveMoviePort;
+    private final MovieFactory movieFactory;
 
     @Override
     public Movie changeState(UUID id) {
@@ -28,6 +30,8 @@ public class ChangeStateCase implements ChangeStatePort {
         // Change state
         movie.changeState();
         // Save movie
-        return saveMoviePort.save(movie);
+        var savedMovie = saveMoviePort.save(movie);
+        // Return movie with categories and classification
+        return movieFactory.movieWithAllRelations(savedMovie);
     }
 }
