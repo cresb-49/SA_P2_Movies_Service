@@ -14,7 +14,7 @@ public class UpdateMovieRequestDTO {
     private UUID id;
     private String title;
     private UUID classificationId;
-    private List<UUID> categoryIds;
+    private List<UUID> categoriesId;
     private int duration;
     private String sinopsis;
     private String classification;
@@ -23,6 +23,6 @@ public class UpdateMovieRequestDTO {
     private MultipartFile image;
 
     public UpdateMovieDTO toDTO(UUID id, MultipartFile image) {
-        return new UpdateMovieDTO(id, title, classificationId, categoryIds, duration, sinopsis, classification, director, casting, image);
+        return new UpdateMovieDTO(id, title, classificationId, categoriesId, duration, sinopsis, classification, director, casting, image);
     }
 }

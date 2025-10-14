@@ -11,7 +11,7 @@ import java.util.UUID;
 public class CreateMovieRequestDTO {
     private String title;
     private UUID classificationId;
-    private List<UUID> categoreIds;
+    private List<UUID> categoriesId;
     private int duration;
     private String sinopsis;
     private String classification;
@@ -19,6 +19,6 @@ public class CreateMovieRequestDTO {
     private String casting;
 
     public CreateMovieDTO toDTO(MultipartFile image) {
-        return new CreateMovieDTO(title, classificationId, categoreIds, duration, sinopsis, classification, director, casting, image);
+        return new CreateMovieDTO(title, classificationId, categoriesId, duration, sinopsis, classification, director, casting, image);
     }
 }

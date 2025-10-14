@@ -64,7 +64,6 @@ public class Movie {
             int duration,
             String sinopsis,
             UUID classificationId,
-            List<UUID> categoryIds,
             String director,
             String casting,
             String urlImage

@@ -12,6 +12,9 @@ import java.util.List;
 @AllArgsConstructor
 public class MovieResponseMapper {
 
+    private final CategoryViewResponseMapper categoryViewResponseMapper;
+    private final ClassificationViewResponseMapper classificationViewResponseMapper;
+
     public MovieResponseDTO toResponse(Movie movie) {
         return new MovieResponseDTO(
                 movie.getId(),
@@ -23,7 +26,9 @@ public class MovieResponseMapper {
                 movie.getCasting(),
                 movie.getUrlImage(),
                 movie.getCreatedAt(),
-                movie.getUpdatedAt()
+                movie.getUpdatedAt(),
+                classificationViewResponseMapper.toResponse(movie.getClassification()),
+                categoryViewResponseMapper.toResponseList(movie.getCategories())
         );
     }
 

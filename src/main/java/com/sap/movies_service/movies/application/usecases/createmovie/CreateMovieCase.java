@@ -66,7 +66,6 @@ public class CreateMovieCase implements CreateMoviePort {
                 createMovieDTO.getDuration(),
                 createMovieDTO.getSinopsis(),
                 createMovieDTO.getClassificationId(),
-                createMovieDTO.getCategoriesId(),
                 createMovieDTO.getDirector(),
                 createMovieDTO.getCasting(),
                 urlImage
@@ -77,7 +76,7 @@ public class CreateMovieCase implements CreateMoviePort {
         Movie savedMovie = saveMoviePort.save(movie);
         // Save the categories of the movie
         List<CategoryMovie> categoryMovies = categories.stream()
-                .map(ca -> new CategoryMovie(savedMovie.getId(), ca.id()))
+                .map(ca -> new CategoryMovie(ca.id(),savedMovie.getId()))
                 .toList();
         saveCategoriesMoviePort.saveCategoriesMovie(categoryMovies);
         // Upload the image to S3
