@@ -60,14 +60,14 @@ public class MovieController {
     }
 
     //Public endpoints
-    @GetMapping("/{id}")
+    @GetMapping("/public/{id}")
     public ResponseEntity<?> getMovieById(@PathVariable String id) {
         var result = findMoviePort.findById(id);
         return ResponseEntity.ok(movieResponseMapper.toResponse(result));
     }
 
     //public endpoint to get all movies with pagination
-    @GetMapping("/search")
+    @GetMapping("/public/search")
     public ResponseEntity<?> getAllMovies(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "title", required = false) String title,
@@ -84,7 +84,7 @@ public class MovieController {
         return ResponseEntity.ok(movieResponseMapper.toResponsePage(result));
     }
 
-    @GetMapping("/all")
+    @GetMapping("/public/all")
     public ResponseEntity<?> getAllMoviesNoPagination(
             @RequestParam(name = "page", defaultValue = "0") int page
     ) {
@@ -99,7 +99,7 @@ public class MovieController {
         return ResponseEntity.ok(movieResponseMapper.toResponse(result));
     }
 
-    @PostMapping("/ids")
+    @PostMapping("/public/ids")
     public ResponseEntity<?> getMoviesByIds(@RequestBody List<UUID> ids) {
         var result = findMoviePort.findByIdsIn(ids);
         return ResponseEntity.ok(movieResponseMapper.toResponseList(result));

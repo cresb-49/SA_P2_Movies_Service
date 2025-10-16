@@ -27,7 +27,7 @@ public class CategoryController {
 
     private final CategoryResponseMapper categoryResponseMapper;
 
-    @GetMapping("/{id}")
+    @GetMapping("/public/{id}")
     public ResponseEntity<?> getById(@PathVariable UUID id) {
         var category = findCategoryCasePort.findById(id);
         var response = categoryResponseMapper.toDTO(category);
@@ -57,14 +57,14 @@ public class CategoryController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/ids")
+    @PostMapping("/public/ids")
     public ResponseEntity<?> getByIds(@RequestBody List<UUID> ids) {
         var categories = findCategoryCasePort.findAllById(ids);
         var response = categoryResponseMapper.toDTOList(categories);
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/search")
+    @GetMapping("/public/search")
     public ResponseEntity<?> search(@RequestParam(name = "query", required = false) String query) {
         var categories = findCategoryCasePort.findByNameInsensitive(query);
         var response = categoryResponseMapper.toDTOList(categories);

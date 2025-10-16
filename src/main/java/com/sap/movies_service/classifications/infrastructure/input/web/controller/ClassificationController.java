@@ -27,7 +27,7 @@ public class ClassificationController {
     private final ClassificationResponseMapper classificationResponseMapper;
 
     // public endpoints
-    @GetMapping("/{id}")
+    @GetMapping("/public/{id}")
     public ResponseEntity<?> getById(@PathVariable UUID id) {
         var classification = findClassificationCasePort.findById(id);
         var response = classificationResponseMapper.toDTO(classification);
@@ -50,7 +50,7 @@ public class ClassificationController {
     }
 
     // public endpoints
-    @GetMapping("/all")
+    @GetMapping("/public/all")
     public ResponseEntity<?> getAll() {
         var classifications = findClassificationCasePort.findAll();
         var response = classificationResponseMapper.toDTOList(classifications);
@@ -58,7 +58,7 @@ public class ClassificationController {
     }
 
     // public endpoints
-    @PostMapping("/ids")
+    @PostMapping("/public/ids")
     public ResponseEntity<?> getAllByIds(@RequestBody List<UUID> ids) {
         var classifications = findClassificationCasePort.findAllById(ids);
         var response = classificationResponseMapper.toDTOList(classifications);
