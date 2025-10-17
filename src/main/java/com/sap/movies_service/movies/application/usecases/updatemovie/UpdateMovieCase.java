@@ -93,7 +93,7 @@ public class UpdateMovieCase implements UpdateMoviePort {
         }
         if (!toAdd.isEmpty()) {
             List<CategoryMovie> newCategoriesMovies = toAdd.stream()
-                    .map(categoryId -> new CategoryMovie(movie.getId(), categoryId))
+                    .map(categoryId -> new CategoryMovie(categoryId,movie.getId()))
                     .toList();
             saveCategoriesMoviePort.saveCategoriesMovie(newCategoriesMovies);
         }
