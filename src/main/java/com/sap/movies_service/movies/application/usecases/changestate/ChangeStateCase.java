@@ -25,7 +25,7 @@ public class ChangeStateCase implements ChangeStatePort {
     public Movie changeState(UUID id) {
         // Find movie
         var movie = findingMoviePort.findById(id).orElseThrow(
-                () -> new NotFoundException("Movie with id " + id + " not found")
+                () -> new NotFoundException("La película con ID " + id + " no existe")
         );
         // Change state
         movie.changeState();

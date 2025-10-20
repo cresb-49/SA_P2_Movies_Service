@@ -32,7 +32,7 @@ public class DeleteMovieCase implements DeleteMoviePort {
     @Override
     public void delete(UUID id) {
         Movie movie = findingMoviePort.findById(id).orElseThrow(
-                () -> new NotFoundException("Movie with id " + id + " does not exist")
+                () -> new NotFoundException("La película con ID " + id + " no existe")
         );
         deletingMoviePort.deleteMovieById(id);
         deleteImageFromS3(movie);
@@ -42,7 +42,7 @@ public class DeleteMovieCase implements DeleteMoviePort {
         try {
             var urlImage = movie.getUrlImage();
             if (urlImage == null || urlImage.isEmpty()) {
-                throw new IllegalStateException("Movie does not have an image to delete");
+                throw new IllegalStateException("La película no tiene una imagen para eliminar");
             }
             // Extract the key from the urlImage
             var key = urlImage.substring(urlImage.lastIndexOf("/") + 1);

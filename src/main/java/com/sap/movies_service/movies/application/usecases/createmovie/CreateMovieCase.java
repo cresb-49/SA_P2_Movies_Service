@@ -41,20 +41,20 @@ public class CreateMovieCase implements CreateMoviePort {
         // Verify if classificationId exists
         var existsClassification = findingClassificationPort.existsById(createMovieDTO.getClassificationId());
         if (!existsClassification) {
-            throw new NotFoundException("Selected classification does not exist");
+            throw new NotFoundException("La clasificación con ID " + createMovieDTO.getClassificationId() + " no existe");
         }
         // Verify if categoriesId exists
         var categories = findingCategoriesPort.findAllById(createMovieDTO.getCategoriesId());
         if (categories.size() != createMovieDTO.getCategoriesId().size()) {
             var diffCount = createMovieDTO.getCategoriesId().size() - categories.size();
-            throw new NotFoundException(diffCount + " selected categories do not exist");
+            throw new NotFoundException(diffCount + " categorías seleccionadas no existen");
         }
         // Validate image
         if (createMovieDTO.getImage().isEmpty()) {
-            throw new IllegalArgumentException("Image is required");
+            throw new IllegalArgumentException("La imagen es requerida");
         }
         if (!List.of("image/png", "image/jpg", "image/jpeg").contains(createMovieDTO.getImage().getContentType())) {
-            throw new IllegalArgumentException("Image must be png, jpg or jpeg");
+            throw new IllegalArgumentException("La imagen debe ser png, jpg o jpeg");
         }
         // Generation timestamp
         var now = System.currentTimeMillis();
@@ -88,7 +88,7 @@ public class CreateMovieCase implements CreateMoviePort {
     private String parseImageData(MultipartFile image, Long timestamp) {
         var originalFilename = image.getOriginalFilename();
         if (originalFilename == null || originalFilename.isEmpty()) {
-            throw new IllegalStateException("Image must have a name");
+            throw new IllegalStateException("La imagen debe tener un nombre");
         }
         // Name of the image file is a UUID of the movie + extension
         var imageName = "movie-" + timestamp.toString();
@@ -102,7 +102,7 @@ public class CreateMovieCase implements CreateMoviePort {
         try {
             var originalFilename = image.getOriginalFilename();
             if (originalFilename == null || originalFilename.isEmpty()) {
-                throw new IllegalStateException("Image must have a name");
+                throw new IllegalStateException("La imagen debe tener un nombre");
             }
             var imageName = "movie-" + timestamp.toString();
             var extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);

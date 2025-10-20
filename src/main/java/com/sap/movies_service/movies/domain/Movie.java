@@ -83,25 +83,25 @@ public class Movie {
 
     public void validated() {
         if (this.title == null || this.title.isEmpty()) {
-            throw new IllegalArgumentException("Title is required");
+            throw new IllegalArgumentException("El título es obligatorio");
         }
         if (this.duration <= 0) {
-            throw new IllegalArgumentException("Duration must be greater than 0");
+            throw new IllegalArgumentException("La duración debe ser mayor que 0");
         }
         if (this.sinopsis == null || this.sinopsis.isEmpty()) {
-            throw new IllegalArgumentException("Sinopsis is required");
+            throw new IllegalArgumentException("La sinopsis es obligatoria");
         }
         if (this.classificationId == null) {
-            throw new IllegalArgumentException("Classification is required");
+            throw new IllegalArgumentException("La clasificación es obligatoria");
         }
         if (this.director == null || this.director.isEmpty()) {
-            throw new IllegalArgumentException("Director is required");
+            throw new IllegalArgumentException("El director es obligatorio");
         }
         if (this.casting == null || this.casting.isEmpty()) {
-            throw new IllegalArgumentException("Casting is required");
+            throw new IllegalArgumentException("El casting es obligatorio");
         }
         if (this.urlImage == null || this.urlImage.isEmpty()) {
-            throw new IllegalArgumentException("URL Image is required");
+            throw new IllegalArgumentException("La URL de la imagen es obligatoria");
         }
     }
 

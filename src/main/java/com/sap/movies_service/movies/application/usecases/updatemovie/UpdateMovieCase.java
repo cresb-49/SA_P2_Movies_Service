@@ -48,17 +48,17 @@ public class UpdateMovieCase implements UpdateMoviePort {
         // If the update movie DTO contains an image, we need to delete the old image and upload the new one
         // In other case, do nothing
         Movie movie = findingMoviePort.findById(updateMovieDTO.getId())
-                .orElseThrow(() -> new NotFoundException("Movie not found"));
+                .orElseThrow(() -> new NotFoundException("La película con ID " + updateMovieDTO.getId() + " no existe"));
         // Verify if classificationId exists
         var existsClassification = findingClassificationPort.existsById(updateMovieDTO.getClassificationId());
         if (!existsClassification) {
-            throw new NotFoundException("Selected classification does not exist");
+            throw new NotFoundException("La clasificación seleccionada no existe");
         }
         // Verify if categoriesId exists
         var categories = findingCategoriesPort.findAllById(updateMovieDTO.getCategoryIds());
         if (categories.size() != updateMovieDTO.getCategoryIds().size()) {
             var diffCount = updateMovieDTO.getCategoryIds().size() - categories.size();
-            throw new NotFoundException(diffCount + " selected categories do not exist");
+            throw new NotFoundException(diffCount + " categorías seleccionadas no existen");
         }
         // Validate image if exists
         var updateImage = updateMovieDTO.getImage() != null && !updateMovieDTO.getImage().isEmpty();
@@ -134,7 +134,7 @@ public class UpdateMovieCase implements UpdateMoviePort {
     private String parseImageData(MultipartFile image, Movie movie, Long timestamp) {
         var originalFilename = image.getOriginalFilename();
         if (originalFilename == null || originalFilename.isEmpty()) {
-            throw new IllegalStateException("Image must have a name");
+            throw new IllegalStateException("La imagen debe tener un nombre");
         }
         // Name of the image file is a UUID of the movie + extension
         var imageName = "movie-" + timestamp.toString();
@@ -154,7 +154,7 @@ public class UpdateMovieCase implements UpdateMoviePort {
         try {
             var originalFilename = image.getOriginalFilename();
             if (originalFilename == null || originalFilename.isEmpty()) {
-                throw new IllegalStateException("Image must have a name");
+                throw new IllegalStateException("La imagen debe tener un nombre");
             }
             var imageName = "movie-" + timestamp.toString();
             var extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);

@@ -25,7 +25,7 @@ public class FindMovieCase implements FindMoviePort {
     @Override
     public Movie findById(String id) {
         var movie = findingMoviePort.findById(UUID.fromString(id)).orElseThrow(
-                () -> new NotFoundException("Movie with id " + id + " does not exist")
+                () -> new NotFoundException("La película con ID " + id + " no existe")
         );
         return movieFactory.movieWithAllRelations(movie);
     }
