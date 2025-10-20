@@ -23,7 +23,7 @@ public class DeleteCategoryCase implements DeleteCategoryCasePort {
         // Check if category exists
         findCategoryPort.findById(id)
                 .orElseThrow(
-                        () -> new NotFoundException("Category with id " + id + " not found")
+                        () -> new NotFoundException("La categoría con id " + id + " no existe")
                 );
         deleteCategoryPort.deleteById(id);
     }

@@ -22,7 +22,7 @@ public class CreateCategoryCase implements CreateCategoryCasePort {
         // find with insensitive name
         findCategoryPort.findByNameInsensitive(name).ifPresent(
                 c -> {
-                    throw new EntityAlreadyExistsException("Category with name " + name + " already exists");
+                    throw new EntityAlreadyExistsException("La categoría con nombre " + name + " ya existe");
                 }
         );
         // Create category

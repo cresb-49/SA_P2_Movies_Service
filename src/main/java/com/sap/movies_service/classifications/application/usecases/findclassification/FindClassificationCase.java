@@ -27,7 +27,7 @@ public class FindClassificationCase implements FindClassificationCasePort {
     @Override
     public Classification findById(UUID id) {
         return findClassificationPort.findById(id)
-                .orElseThrow(() -> new NotFoundException("Classification with id " + id + " not found"));
+                .orElseThrow(() -> new NotFoundException("La clasificación con id " + id + " no existe"));
     }
 
     @Override

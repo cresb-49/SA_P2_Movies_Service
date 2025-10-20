@@ -22,13 +22,13 @@ public class UpdateCategoryCase implements UpdateCategoryCasePort {
     public Category update(UpdateCategoryDTO updateCategoryDTO) {
         // Find category by id
         Category category = findCategoryPort.findById(updateCategoryDTO.id()).orElseThrow(
-                () -> new NotFoundException("Category with id " + updateCategoryDTO.id() + " not found")
+                () -> new NotFoundException("La categoría con id " + updateCategoryDTO.id() + " no existe")
         );
         // Find category by new name
         findCategoryPort.findByNameInsensitive(updateCategoryDTO.name(), updateCategoryDTO.id()
         ).ifPresent(
                 c -> {
-                    throw new IllegalArgumentException("Category with name " + updateCategoryDTO.name() + " already exists");
+                    throw new IllegalArgumentException("La categoría con nombre " + updateCategoryDTO.name() + " ya existe");
                 }
         );
         // Update category

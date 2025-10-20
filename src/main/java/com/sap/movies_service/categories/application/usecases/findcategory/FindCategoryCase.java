@@ -26,7 +26,7 @@ public class FindCategoryCase implements FindCategoryCasePort {
     @Override
     public Category findById(UUID id) {
         return findCategoryPort.findById(id).orElseThrow(
-                () -> new NotFoundException("Category with id " + id + " not found")
+                () -> new NotFoundException("La categoría con id " + id + " no existe")
         );
     }
 

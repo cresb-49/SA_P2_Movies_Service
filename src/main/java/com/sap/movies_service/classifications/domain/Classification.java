@@ -24,10 +24,10 @@ public class Classification {
 
     public void validate() {
         if (this.name == null || this.name.isEmpty()) {
-            throw new IllegalArgumentException("Classification name cannot be null or empty");
+            throw new IllegalArgumentException("El nombre de la clasificación no puede ser nulo o vacío");
         }
         if (this.description == null || this.description.isEmpty()) {
-            throw new IllegalArgumentException("Classification description cannot be null or empty");
+            throw new IllegalArgumentException("La descripción de la clasificación no puede ser nula o vacía");
         }
     }
 

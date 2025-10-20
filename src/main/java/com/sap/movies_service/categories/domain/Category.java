@@ -28,7 +28,7 @@ public class Category {
 
     public void validate() {
         if (this.name == null || this.name.isEmpty()) {
-            throw new IllegalArgumentException("Category name cannot be null or empty");
+            throw new IllegalArgumentException("El nombre de la categoría no puede ser nulo o vacío");
         }
     }
 }

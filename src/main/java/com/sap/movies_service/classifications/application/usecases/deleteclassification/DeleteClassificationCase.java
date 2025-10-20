@@ -23,11 +23,11 @@ public class DeleteClassificationCase implements DeleteClassificationCasePort {
     public void deleteById(UUID id) {
         var exists = findClassificationPort.existsById(id);
         if (!exists) {
-            throw new IllegalArgumentException("Classification with id " + id + " not found");
+            throw new IllegalArgumentException("La clasificación con id " + id + " no existe");
         }
         var hasMovies = moviesWithClassificationPort.hasMoviesWithClassificationId(id);
         if (hasMovies) {
-            throw new IllegalStateException("Classification with id " + id + " cannot be deleted because it is associated with movies");
+            throw new IllegalStateException("La clasificación con id " + id + " no se puede eliminar porque está asociada con películas");
         }
         deleteClassificationPort.deleteById(id);
     }

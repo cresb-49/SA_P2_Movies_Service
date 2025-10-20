@@ -22,7 +22,7 @@ public class CreateClassificationCase implements CreateClassificationCasePort {
 
         findClassificationPort.findByNameIgnoreCase(createClassificationDTO.name()).ifPresent(
                 c -> {
-                    throw new IllegalArgumentException("Classification with name " + createClassificationDTO.name() + " already exists");
+                    throw new IllegalArgumentException("La clasificación con nombre " + createClassificationDTO.name() + " ya existe");
                 }
         );
         //Create classification
