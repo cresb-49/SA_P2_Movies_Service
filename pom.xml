@@ -163,6 +163,9 @@
                 <configuration>
                     <excludes>
                         <exclude>**/dtos/**</exclude>
+                        <exclude>**/dto/**</exclude>
+                        <exclude>**/mapper/**</exclude>
+                        <exclude>**/mappers/**</exclude>
                     </excludes>
                 </configuration>
                 <executions>
