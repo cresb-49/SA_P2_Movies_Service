@@ -31,6 +31,12 @@
         <spring-cloud.version>2025.0.0</spring-cloud.version>
     </properties>
     <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -166,6 +172,8 @@
                         <exclude>**/dto/**</exclude>
                         <exclude>**/mapper/**</exclude>
                         <exclude>**/mappers/**</exclude>
+                        <exclude>**/controllers/**</exclude>
+                        <exclude>**/controller/**</exclude>
                     </excludes>
                 </configuration>
                 <executions>
