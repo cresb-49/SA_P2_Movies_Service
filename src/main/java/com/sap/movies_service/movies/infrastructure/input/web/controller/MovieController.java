@@ -3,9 +3,9 @@ package com.sap.movies_service.movies.infrastructure.input.web.controller;
 import com.sap.movies_service.movies.application.input.*;
 import com.sap.movies_service.movies.application.usecases.findmovie.dtos.MovieFilter;
 import com.sap.movies_service.movies.infrastructure.input.web.dtos.CreateMovieRequestDTO;
+import com.sap.movies_service.movies.infrastructure.input.web.dtos.MovieIdsRequestDTO;
 import com.sap.movies_service.movies.infrastructure.input.web.dtos.UpdateMovieRequestDTO;
 import com.sap.movies_service.movies.infrastructure.input.web.mappers.MovieResponseMapper;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +46,7 @@ public class MovieController {
     @Operation(
             summary = "Crear película",
             description = "Crea una nueva película con metadatos e imagen (multipart/form-data).",
-            security = { @SecurityRequirement(name = "bearerAuth") },
+            security = {@SecurityRequirement(name = "bearerAuth")},
             requestBody = @RequestBody(
                     required = true,
                     content = @Content(
@@ -77,7 +78,7 @@ public class MovieController {
     @Operation(
             summary = "Actualizar película",
             description = "Actualiza parcialmente una película por ID; acepta metadatos e imagen opcional (multipart/form-data).",
-            security = { @SecurityRequirement(name = "bearerAuth") },
+            security = {@SecurityRequirement(name = "bearerAuth")},
             requestBody = @RequestBody(
                     required = true,
                     content = @Content(
@@ -108,7 +109,7 @@ public class MovieController {
     @Operation(
             summary = "Eliminar película",
             description = "Elimina una película por su ID.",
-            security = { @SecurityRequirement(name = "bearerAuth") },
+            security = {@SecurityRequirement(name = "bearerAuth")},
             responses = {
                     @ApiResponse(responseCode = "204", description = "Eliminada correctamente", content = @Content(schema = @Schema(hidden = true))),
                     @ApiResponse(responseCode = "401", description = "No autorizado", content = @Content(schema = @Schema(hidden = true))),
@@ -181,7 +182,7 @@ public class MovieController {
     @Operation(
             summary = "Cambiar estado activo de la película",
             description = "Cambia el estado activo/inactivo de una película por ID.",
-            security = { @SecurityRequirement(name = "bearerAuth") },
+            security = {@SecurityRequirement(name = "bearerAuth")},
             responses = {
                     @ApiResponse(responseCode = "200", description = "Estado actualizado", content = @Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "401", description = "No autorizado", content = @Content(schema = @Schema(hidden = true))),
@@ -208,8 +209,8 @@ public class MovieController {
             }
     )
     @PostMapping("/public/ids")
-    public ResponseEntity<?> getMoviesByIds(@RequestBody List<UUID> ids) {
-        var result = findMoviePort.findByIdsIn(ids);
+    public ResponseEntity<?> getMoviesByIds(@RequestBody MovieIdsRequestDTO ids) {
+        var result = findMoviePort.findByIdsIn(ids.ids());
         return ResponseEntity.ok(movieResponseMapper.toResponseList(result));
     }
 }
