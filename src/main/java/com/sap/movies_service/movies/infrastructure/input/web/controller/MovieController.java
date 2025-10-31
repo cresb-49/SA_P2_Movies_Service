@@ -3,7 +3,6 @@ package com.sap.movies_service.movies.infrastructure.input.web.controller;
 import com.sap.movies_service.movies.application.input.*;
 import com.sap.movies_service.movies.application.usecases.findmovie.dtos.MovieFilter;
 import com.sap.movies_service.movies.infrastructure.input.web.dtos.CreateMovieRequestDTO;
-import com.sap.movies_service.movies.infrastructure.input.web.dtos.MovieIdsRequestDTO;
 import com.sap.movies_service.movies.infrastructure.input.web.dtos.UpdateMovieRequestDTO;
 import com.sap.movies_service.movies.infrastructure.input.web.mappers.MovieResponseMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,7 +11,6 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Encoding;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -47,7 +45,7 @@ public class MovieController {
             summary = "Crear película",
             description = "Crea una nueva película con metadatos e imagen (multipart/form-data).",
             security = {@SecurityRequirement(name = "bearerAuth")},
-            requestBody = @RequestBody(
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     required = true,
                     content = @Content(
                             mediaType = MediaType.MULTIPART_FORM_DATA_VALUE,
@@ -79,7 +77,7 @@ public class MovieController {
             summary = "Actualizar película",
             description = "Actualiza parcialmente una película por ID; acepta metadatos e imagen opcional (multipart/form-data).",
             security = {@SecurityRequirement(name = "bearerAuth")},
-            requestBody = @RequestBody(
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     required = true,
                     content = @Content(
                             mediaType = MediaType.MULTIPART_FORM_DATA_VALUE,
@@ -200,7 +198,7 @@ public class MovieController {
     @Operation(
             summary = "Obtener películas por IDs",
             description = "Devuelve una lista de películas que coinciden con los UUIDs proporcionados.",
-            requestBody = @RequestBody(
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     required = true,
                     content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UUID.class)))
             ),
@@ -209,8 +207,8 @@ public class MovieController {
             }
     )
     @PostMapping("/public/ids")
-    public ResponseEntity<?> getMoviesByIds(@RequestBody MovieIdsRequestDTO ids) {
-        var result = findMoviePort.findByIdsIn(ids.ids());
+    public ResponseEntity<?> getMoviesByIds(@RequestBody List<UUID> ids) {
+        var result = findMoviePort.findByIdsIn(ids);
         return ResponseEntity.ok(movieResponseMapper.toResponseList(result));
     }
 }
