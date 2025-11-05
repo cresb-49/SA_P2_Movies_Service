@@ -4,7 +4,7 @@ pipeline {
     environment {
         BUILD_DIR = 'target'
         FINAL_JAR_NAME = 'movies-service.jar'
-        DEST_DIR = '/var/api'
+        DEST_DIR = '/var/api/pf_sa'
         JAR_EXCLUDE_PATTERN = 'sources\\|javadoc'
     }
 
