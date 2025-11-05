@@ -21,15 +21,17 @@ pipeline {
             }
         }
 
-        stage('Publish JaCoCo Report') {
+        stage('Publish Coverage Report') {
             steps {
                 script {
-                    if (fileExists("${BUILD_DIR}/jacoco.exec")) {
-                        jacoco execPattern: "${BUILD_DIR}/jacoco.exec",
-                               classPattern: "${BUILD_DIR}/classes",
-                               sourcePattern: 'src/main/java'
+                    def jacocoReport = "${BUILD_DIR}/site/jacoco/jacoco.xml"
+                    if (fileExists(jacocoReport)) {
+                        recordCoverage(
+                            tools: [jacocoAdapter(jacocoReport)],
+                            sourceFileResolver: sourceFiles('STORE_LAST_BUILD')
+                        )
                     } else {
-                        echo "JaCoCo exec file not found at ${BUILD_DIR}/jacoco.exec"
+                        echo "JaCoCo XML report not found at ${jacocoReport}"
                     }
                 }
             }
