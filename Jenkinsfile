@@ -27,8 +27,7 @@ pipeline {
                     def jacocoReport = "${BUILD_DIR}/site/jacoco/jacoco.xml"
                     if (fileExists(jacocoReport)) {
                         recordCoverage(
-                            tools: [jacocoAdapter(jacocoReport)],
-                            sourceFileResolver: sourceFiles('STORE_LAST_BUILD')
+                            tools: [[parser: 'jacoco', reportFile: jacocoReport]]
                         )
                     } else {
                         echo "JaCoCo XML report not found at ${jacocoReport}"
